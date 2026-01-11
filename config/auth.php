@@ -40,6 +40,18 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'hospital'=>[
+            'driver'=>'session',
+            'provider'=>'hospitals'
+        ],
+        'doctor'=>[
+            'driver'=>'session',
+            'provider'=>'doctors'
+        ],
+        'patient'=>[
+            'driver'=>'session',
+            'provider'=>'patients'
+        ]
     ],
 
     /*

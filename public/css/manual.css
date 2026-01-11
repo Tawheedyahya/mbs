@@ -1,0 +1,219 @@
+body {
+  /* background-color: var(--bs-primary); */
+  /* color: #ffffff; */
+}
+/* SIDEBAR  */
+.sidebar-toggle {
+    width: 42px;
+    height: 42px;
+    background-color: white; /* visible on primary */
+    color:black;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color .2s ease, transform .1s ease;
+}
+.sidebar-toggle:hover{
+    background-color: white;
+    color: black;
+}
+/* Sidebar base */
+#sidebar .nav-link {
+    color: #e5e7eb;
+    padding: 10px 14px;
+    border-radius: 6px;
+    transition: background-color .2s ease;
+}
+
+/* Hover */
+#sidebar .nav-link:hover {
+    background-color: #374151;
+    color: #ffffff;
+}
+
+#sidebar .nav-link.active {
+    background-color: rgb(var(--bs-primary-rgb), 0.18);
+    color: #ffffff;
+    font-weight: 600;
+}
+/* END SIDEBAR */
+
+
+/*  */
+/* FORM  */
+/*  */
+
+.dynamic-form-card {
+    border-radius: 14px;
+    background: linear-gradient(180deg, #ffffff, #f8f9fa);
+    transition: all 0.3s ease;
+}
+
+.dynamic-form-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+/* =========================
+   ANIMATION (ENTRY)
+========================= */
+.form-animate {
+    animation: fadeSlide 0.6s ease-out both;
+}
+
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================
+   INPUT STYLING
+========================= */
+.form-control,
+.form-select {
+    border-radius: 10px;
+    padding: 10px 14px;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 0.15rem rgba(79,70,229,.25);
+}
+
+/* =========================
+   LABELS
+========================= */
+.form-label {
+    font-size: 0.85rem;
+    color: #374151;
+    margin-bottom: 4px;
+}
+
+/* =========================
+   CHECKBOX & RADIO
+========================= */
+.form-check-input {
+    cursor: pointer;
+}
+
+.form-check-label {
+    cursor: pointer;
+}
+
+/* =========================
+   ERROR STATES
+========================= */
+.border-danger {
+    border-color: #dc2626 !important;
+}
+
+.error-text {
+    color: #dc2626;
+    font-size: 0.75rem;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Shake animation on error */
+.shake {
+    animation: shake 0.3s;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    50% { transform: translateX(4px); }
+    75% { transform: translateX(-4px); }
+    100% { transform: translateX(0); }
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.btn-primary {
+    border-radius: 10px;
+    padding: 10px 22px;
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #4338ca, #4f46e5);
+}
+
+.btn-outline-secondary {
+    border-radius: 10px;
+}
+
+/* =========================
+   MOBILE FIXES
+========================= */
+@media (max-width: 768px) {
+    .dynamic-form-card {
+        border-radius: 10px;
+    }
+}
+
+
+/*  */
+/* END FORM */
+/*  */
+
+
+
+/*  */
+/* DATATABLES */
+/*  */
+/* Header styling */
+table.dataTable thead th {
+    background-color: #0d6efd;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Row hover */
+table.dataTable tbody tr:hover {
+    background-color: #f1f5ff;
+}
+
+/* Pagination */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 6px 12px;
+    margin: 0 2px;
+    border-radius: 6px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background-color: #0d6efd !important;
+    color: #fff !important;
+    border: none;
+}
+
+/* Search input */
+.dataTables_wrapper .dataTables_filter input {
+    border-radius: 8px;
+    padding: 6px 10px;
+}
+
+/* Length dropdown */
+.dataTables_wrapper .dataTables_length select {
+    border-radius: 8px;
+    padding: 4px 8px;
+}
+/*  */
+/* END DATATABLES */
+/*  */

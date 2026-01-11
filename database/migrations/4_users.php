@@ -13,12 +13,42 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+
+            $table->enum('role', [
+                'super_admin',
+                'hospital_admin',
+                'doctor'
+            ])->index();
+
+            $table->foreignId('hospital_id')
+                ->nullable()
+                ->constrained('hospitals')
+                ->nullOnDelete()
+                ->index();
+
+            $table->unsignedBigInteger('doctor_id')->nullable();
+            $table->foreign('doctor_id')
+                ->references('id')
+                ->on('doctors')
+                ->nullOnDelete();
+
+            $table->boolean('status')
+                ->default(true)
+                ->comment('0=inactive,1=active');
+
+            $table->string('api_code');
+
             $table->rememberToken();
             $table->timestamps();
+
+            // ✅ SAFE multi-tenant uniqueness
+            $table->unique(['hospital_id', 'email']);
+            $table->unique(['hospital_id', 'api_code']);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

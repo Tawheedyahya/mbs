@@ -23,6 +23,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        // return view('home');
+        $role=auth()->user()->role;
+        // dd($role);
+        return match($role){
+            'super_admin'=>redirect()->route('super_admin.dashboard'),
+            'hospital_admin'=>redirect()->route('hospital_admin.dashboard'),
+            'doctor'=>redirect()->route('doctor.dashboard'),
+            default=>abort(403),
+        };
     }
 }

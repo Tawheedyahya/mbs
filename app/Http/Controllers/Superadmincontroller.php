@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class Superadmincontroller extends Controller
@@ -133,8 +134,8 @@ class Superadmincontroller extends Controller
                 // 2️⃣ Delete old logo (if exists)
                 if (!empty($logoPath)) {
                     $oldPath = public_path($logoPath);
-                    if (file_exists($oldPath)) {
-                        unlink($oldPath);
+                    if (Storage::disk('s3')->exists($logoPath)) {
+                        Storage::disk('s3')->delete($logoPath);
                     }
                 }
                 // 3️⃣ Prepare new filename (time-based)
@@ -142,10 +143,14 @@ class Superadmincontroller extends Controller
                 $filename = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
 
                 // 4️⃣ Move file
-                $file->move($dir, $filename);
+                Storage::disk('s3')->putFileAs(
+                    'hospital_logos',   // folder
+                    $file,              // uploaded file
+                    $filename           // filename
+                );
 
                 // 5️⃣ Save relative path (DB-safe)
-                $logo = 'hospital_logos/' . $filename;
+                $logoPath = 'hospital_logos/' . $filename;
             }
 
             // ✅ USER
@@ -186,9 +191,9 @@ class Superadmincontroller extends Controller
             } else {
                 $hospital = Hospital::create([
                     'hospital_name' => $request->hospital_name,
-                    'hospital_code' => $this->uniquecode('hospital'),
+                    'hospital_code' => $this->uniquecode('user'),
                     'hospital_phone' => $request->hospital_phone,
-                    'hospital_logo' => $logo,
+                    // 'hospital_logo' => $logo,
                     'admin_name' => $request->admin_name,
                     'admin_phone' => $request->admin_phone,
                     'address_line' => $request->address_line,
@@ -211,14 +216,13 @@ class Superadmincontroller extends Controller
 
     public function edit_hospital_view($id)
     {
-
-
+        Cache::forget('hospital_admin.datatable');
         // 2️⃣ Fetch hospital + admin user data
         $data = DB::table('hospitals as h')
-            ->join('users as u', 'u.hospital_id', '=', 'h.id')
+            ->join('users as u', 'u.hospital_id', '=', 'h.id')->where('role','hospital_admin')
             ->where('h.id', $id)
             ->select(
-                'h.id as id',
+                'u.id as id',
                 'u.email as email',
                 'h.hospital_name as hospital_name',
                 'h.hospital_phone as hospital_phone',
@@ -244,26 +248,27 @@ class Superadmincontroller extends Controller
         ]);
     }
 
+
     public function edit_hospital(Request $request, $id)
     {
-        // 1️⃣ Fetch hospital
-        $hospital = Hospital::findOrFail($id);
+        Log::channel('super_admin')->info('Edit hospital started', [
+            'hospital_id' => $id,
+            'user_id' => auth()->id()
+        ]);
 
-        // 2️⃣ Fetch hospital admin user
-        $user = User::where('hospital_id', $hospital->id)
+        $hospital_check = Hospital::findOrFail($id);
+
+        $user_check = User::where('hospital_id', $hospital_check->id)
             ->where('role', 'hospital_admin')
             ->first();
 
-        if (!$user) {
-            abort(404, 'Hospital admin not found');
-        }
+        $user_id = $user_check?->id;
 
-        // 3️⃣ Validation (FIXED)
         $request->validate([
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users', 'email')->ignore($user->id),
+                Rule::unique('users', 'email')->ignore($user_id),
             ],
             'hospital_name'  => 'required|string',
             'hospital_phone' => 'required|string',
@@ -273,75 +278,136 @@ class Superadmincontroller extends Controller
             'city'           => 'required|string',
             'country'        => 'required|string',
             'db_status'      => 'required|in:0,1',
-            'password'       => 'nullable|min:8',
+            'password'       => 'nullable|min:6',
             'hospital_logo'  => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        // 4️⃣ Update USER (CORRECT WAY)
-        $userData = [
-            'email'       => $request->email,
-            'name'        => $request->admin_name,
-            'status'      => $request->is_active ?? 0,
-            'hospital_id' => $hospital->id,
-            'role'        => 'hospital_admin',
-        ];
+        DB::beginTransaction();
 
-        // Update password ONLY if provided
-        if ($request->filled('password')) {
-            $userData['password'] = Hash::make($request->password);
-        }
-        // hospital logo
+        try {
 
-        $user->update($userData);
+            $hospital = Hospital::findOrFail($id);
 
-        // 5️⃣ Update HOSPITAL
-        $hospitalData = [
-            'hospital_name'  => $request->hospital_name,
-            'hospital_phone' => $request->hospital_phone,
-            'admin_name'     => $request->admin_name,
-            'admin_phone'    => $request->admin_phone,
-            'address_line'   => $request->address_line,
-            'address_line2'  => $request->address_line2,
-            'city'           => $request->city,
-            'country'        => $request->country,
-            'db_status'      => $request->db_status,
-        ];
+            $user = User::where('hospital_id', $hospital->id)
+                ->where('role', 'hospital_admin')
+                ->firstOrFail();
 
-        // Handle logo upload if exists
-        if ($request->hasFile('hospital_logo')) {
+            $userData = [
+                'email'       => $request->email,
+                'name'        => $request->admin_name,
+                'status'      => $request->is_active ?? 0,
+                'hospital_id' => $hospital->id,
+                'role'        => 'hospital_admin',
+            ];
 
-            $oldPath = public_path($hospital->hospital_logo);
-
-            if ($hospital->hospital_logo && file_exists($oldPath)) {
-                unlink($oldPath);
+            if ($request->filled('password')) {
+                $userData['password'] = Hash::make($request->password);
             }
 
-            $file = $request->file('hospital_logo');
+            $user->update($userData);
 
-            $dir = public_path('hospital_logos');
-            if (!is_dir($dir)) {
-                mkdir($dir, 0755, true);
+            $hospitalData = [
+                'hospital_name'  => $request->hospital_name,
+                'hospital_phone' => $request->hospital_phone,
+                'admin_name'     => $request->admin_name,
+                'admin_phone'    => $request->admin_phone,
+                'address_line'   => $request->address_line,
+                'address_line2'  => $request->address_line2,
+                'city'           => $request->city,
+                'country'        => $request->country,
+                'db_status'      => $request->db_status,
+            ];
+
+            if ($request->hasFile('hospital_logo')) {
+
+                if ($hospital->hospital_logo) {
+                    Storage::disk('s3')->delete($hospital->hospital_logo);
+                }
+
+                $file = $request->file('hospital_logo');
+                $filename = time() . '_' . $file->getClientOriginalName();
+
+                Storage::disk('s3')->putFileAs('hospital_logos', $file, $filename);
+
+                $hospitalData['hospital_logo'] = 'hospital_logos/' . $filename;
             }
 
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move($dir, $filename);
+            $hospital->update($hospitalData);
 
-            $hospitalData['hospital_logo'] = 'hospital_logos/' . $filename;
+            DB::commit();
+
+            Cache::forget('hospital_admin');
+
+            Log::channel('super_admin')->info('Edit hospital completed successfully', [
+                'hospital_id' => $hospital->id,
+                'user_id' => $user->id
+            ]);
+
+            return redirect()
+                ->back()
+                ->with('success', 'Hospital updated successfully');
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+
+            Log::channel('super_admin')->error('Edit hospital failed', [
+                'hospital_id' => $id,
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+
+            return redirect()
+                ->back()
+                ->with('error', 'Something went wrong. Please try again.');
         }
-
-        $hospital->update($hospitalData);
-
-        // 6️⃣ Redirect back
-        Cache::forget('hospital_admin');
-        return redirect()
-            ->back()
-            ->with('success', 'Hospital updated successfully');
     }
-    public function delete_hospital($id)
+
+
+    public function delete_hospital(Request $request)
     {
-        $hospital = Hospital::findOrFail($id);
-        $user = User::where('hospital_id', $hospital->id)->where('role', 'hospital_admin')->delete();
+        if (!$request->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Missing hospital ID'
+            ], 422);
+        }
+
+        $hospital = Hospital::find($request->id);
+
+        if (!$hospital) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Hospital not found'
+            ], 404);
+        }
+
+        User::where('hospital_id', $hospital->id)
+            ->where('role', 'hospital_admin')
+            ->delete();
+        @Storage::disk('s3')->delete($hospital->hospital_logo);
+        User::where('hospital_id', $request->id)
+            ->where('role', 'doctor')
+            ->update(['status' => false]);
         $hospital->delete();
-        return back()->with('success', 'Delete successfully Hospital and doctors ');
+        return response()->json([
+            'success' => true,
+            'message' => 'Hospital and hospital admins deleted successfully'
+        ]);
+    }
+    public function test()
+    {
+        return response()->json([
+            'msg' => 'Deleted',
+            'success' => true
+        ], 200);
+    }
+    public function delete_s3()
+    {
+        $path = Storage::disk('s3')->files('doctors');
+        Storage::disk('s3')->delete($path);
+        $k = Storage::disk('s3')->files('hospital_logos');
+        Storage::disk('s3')->delete($k);
+        return response()->json($path);
     }
 }

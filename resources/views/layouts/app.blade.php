@@ -15,6 +15,28 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+        <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <link rel="stylesheet" href="{{ asset('css/manual.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/component.css') }}?v={{ filemtime(public_path('css/component.css')) }}">
+
+    {{-- DATATABLES with Responsive Extension --}}
+    <link rel="stylesheet" href__="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href__="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+    {{-- END DATATABLES --}}
+
+    <link rel="stylesheet" href="{{ asset('css/claude.css') }}">
+    {{-- END DATATABLES --}}
+    {{-- manual js --}}
+    <script src="{{ asset('js/manual.js') }}" defer></script>
+    {{-- end --}}
+    {{-- NICE SELECT --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+
 </head>
 <body>
     <div id="app">

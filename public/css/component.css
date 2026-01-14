@@ -3,8 +3,8 @@
 }
 /* add button */
 .add-btn {
-    background-color: #ffffff;
-    color: #0d6efd; /* Bootstrap primary */
+    background-color: var(--primary-dark);
+    color: white; /* Bootstrap primary */
     border: none;
     padding: 10px 18px;
     border-radius: 10px;
@@ -19,7 +19,7 @@
 
 /* Hover */
 .add-btn:hover {
-    background-color: var(--bs-primary);
+    background-color: var(--primary);
     color: #ffffff;
     transform: translateY(-2px);
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
@@ -38,3 +38,9 @@
 
 
 /* end add button */
+/* Image load */
+.img_load{
+    height: 200px;
+    width: 200px;
+}
+/* End */

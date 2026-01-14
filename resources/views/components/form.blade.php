@@ -94,7 +94,7 @@
             {{-- BUTTONS --}}
             <div class="d-flex justify-content-end mt-4">
                 @if($showReset)
-                    <button type="reset" class="btn btn-outline-secondary me-2">Reset</button>
+                    <button type="reset" class="btn btn-secondary btn-outline-secondary me-2">Reset</button>
                 @endif
                 <button type="submit" class="btn btn-primary px-4">{{ $submit }}</button>
             </div>

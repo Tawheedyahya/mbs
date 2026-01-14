@@ -1,54 +1,57 @@
 @extends('layouts.app1')
 
-@section('title', 'Hospitals and hospital admin list')
+@section('title', 'Doctors list')
 
 @section('content')
 
     <div class="container py-4">
 
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">Hospitals</h4>
-            <a class="btn add-btn" href="{{ route('super_admin.hospitals_add_form') }}">
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+            <h4 class="mb-0">Doctors</h4>
+            <a class="btn add-btn mt-2 mt-md-0" href="{{ route('hospital_admin.doctors_form') }}">
                 + Add Doctor
             </a>
         </div>
 
         <div class="card shadow-sm">
-            <div class="card-body">
+            <div class="card-body p-0 p-md-3">
 
                 <div class="table-responsive">
-                    <table id="doctors_table" class="table table-hover table-bordered align-middle data-table">
+                    <table id="doctors_table" class="table table-hover table-bordered align-middle datatable mb-0">
                         <thead>
                             <tr>
                                 <th>No.</th>
                                 <th>Doctor Name</th>
                                 <th>Doctor Phone</th>
-                                <th>Exp</th>
+                                <th>Experience</th>
                                 <th>Specialization</th>
-                                <th class="text-center">Action</th>
+                                <th class="text-center no-sort">Action</th>
                             </tr>
                         </thead>
 
                         <tbody>
-                            {{-- @foreach ($hospitals as $hospital) --}}
+                            {{-- Sample data for testing --}}
+                            @foreach ($doctors as $doctor)
                                 <tr>
-                                    <td>1</td>
-                                    <td>2</td>
-                                    <td>3</td>
-                                    <td>4</td>
-                                    <td>5</td>
+                                    <td>{{$loop->index}}</td>
+                                    <td>{{$doctor->name}}</td>
+                                    <td>{{$doctor->phone}}</td>
+                                    <td>{{$doctor->doctor_code}}</td>
+                                    <td>{{$doctor->specialization}}</td>
                                     <td class="text-center">
-                                        <div class="d-flex justify-content-center gap-2">
-                                            <a href="" class="btn btn-sm btn-primary">
+                                        <div class="d-flex justify-content-center gap-2 flex-nowrap">
+                                            <a href="{{route('hospital_admin.doctors_edit_view',$doctor->id)}}" class="btn btn-sm btn-primary">
                                                 Edit
                                             </a>
-                                            <a href="" class="btn btn-sm btn-danger" onclick="return confirm('Are you confirm delete both hospitals and doctors')">
+                                            <a href="javascript:void(0)" class="btn btn-sm btn-danger"
+                                                onclick="deletefn(this)" data-id="{{$doctor->id}}" data-action="{{route('hospital_admin.doctor_delete')}}">
                                                 Delete
                                             </a>
                                         </div>
                                     </td>
                                 </tr>
-                            {{-- @endforeach --}}
+                            @endforeach
+                            {{-- Add your foreach loop here --}}
                         </tbody>
                     </table>
                 </div>
@@ -57,34 +60,4 @@
         </div>
     </div>
 
-    {{-- DataTable Init --}}
-    @push('scripts')
-        <script>
-            $(document).ready(function() {
-                $('.data-table').DataTable({
-                    pagingType: "full_numbers",
-                    pageLength: 20,
-                    ordering: true,
-                    searching: true,
-                    info: true,
-                    autoWidth: false,
-                    columnDefs: [{
-                        orderable: false,
-                        targets: 5
-                    }],
-                    language: {
-                        search: "Search:",
-                        lengthMenu: "Show _MENU_ hospitals",
-                        info: "Showing _START_ to _END_ of _TOTAL_ hospitals",
-                        paginate: {
-                            first: "«",
-                            last: "»",
-                            next: "›",
-                            previous: "‹"
-                        }
-                    }
-                });
-            });
-        </script>
-    @endpush
 @endsection

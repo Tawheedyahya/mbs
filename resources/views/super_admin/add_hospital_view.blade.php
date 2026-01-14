@@ -14,10 +14,10 @@
         </div>
 
         <div class="card shadow-sm">
-            <div class="card-body">
+            <div class="card-body p-0 p-md-3">
 
                 <div class="table-responsive">
-                    <table id="hospitalsTable" class="table table-hover table-bordered align-middle data-table">
+                    <table id="hospitalsTable" class="table table-hover table-bordered align-middle datatable">
                         <thead>
                             <tr>
                                 <th>No.</th>
@@ -42,7 +42,7 @@
                                             <a href="{{route('super_admin.hospitals_edit_view',$hospital->id)}}" class="btn btn-sm btn-primary">
                                                 Edit
                                             </a>
-                                            <a href="{{route('super_admin.hospital_delete',$hospital->id)}}" class="btn btn-sm btn-danger" onclick="return confirm('Are you confirm delete both hospitals and doctors')">
+                                            <a href="javascript:void(0)" class="btn btn-sm btn-danger" onclick="deletefn(this)" data-id="{{$hospital->id}}" data-action="{{route('super_admin.hospital_delete')}}" data-method="POST">
                                                 Delete
                                             </a>
                                         </div>
@@ -59,32 +59,6 @@
 
     {{-- DataTable Init --}}
     @push('scripts')
-        <script>
-            $(document).ready(function() {
-                $('.data-table').DataTable({
-                    pagingType: "full_numbers",
-                    pageLength: 20,
-                    ordering: true,
-                    searching: true,
-                    info: true,
-                    autoWidth: false,
-                    columnDefs: [{
-                        orderable: false,
-                        targets: 5
-                    }],
-                    language: {
-                        search: "Search:",
-                        lengthMenu: "Show _MENU_ hospitals",
-                        info: "Showing _START_ to _END_ of _TOTAL_ hospitals",
-                        paginate: {
-                            first: "«",
-                            last: "»",
-                            next: "›",
-                            previous: "‹"
-                        }
-                    }
-                });
-            });
-        </script>
+
     @endpush
 @endsection

@@ -1,219 +1,671 @@
-body {
-  /* background-color: var(--bs-primary); */
-  /* color: #ffffff; */
-}
-/* SIDEBAR  */
-.sidebar-toggle {
-    width: 42px;
-    height: 42px;
-    background-color: white; /* visible on primary */
-    color:black;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    font-size: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color .2s ease, transform .1s ease;
-}
-.sidebar-toggle:hover{
-    background-color: white;
-    color: black;
-}
-/* Sidebar base */
-#sidebar .nav-link {
-    color: #e5e7eb;
-    padding: 10px 14px;
-    border-radius: 6px;
-    transition: background-color .2s ease;
+/* ============================================
+   MANUAL.CSS - Additional Custom Styles
+   ============================================ */
+
+/* ---------- Desktop Sidebar (Persistent) ---------- */
+/* Hide by default (desktop & tablet) */
+.mobile-only {
+  display: none;
 }
 
-/* Hover */
-#sidebar .nav-link:hover {
-    background-color: #374151;
-    color: #ffffff;
+/* Show only on mobile screens */
+@media (max-width: 767.98px) {
+  .mobile-only {
+    display: inline-block;
+  }
 }
 
-#sidebar .nav-link.active {
-    background-color: rgb(var(--bs-primary-rgb), 0.18);
-    color: #ffffff;
-    font-weight: 600;
-}
-/* END SIDEBAR */
+@media (min-width: 992px) {
+  .offcanvas {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    transform: none !important;
+    visibility: visible !important;
+    width: 260px !important;
+    z-index: 1030;
+    padding-top: 70px; /* Height of navbar */
+  }
 
+  .offcanvas.offcanvas-start {
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+  }
 
-/*  */
-/* FORM  */
-/*  */
+  /* Adjust main content for sidebar */
+  .d-flex.flex-fill.flex-grow-1 {
+    margin-left: 260px;
+  }
 
-.dynamic-form-card {
-    border-radius: 14px;
-    background: linear-gradient(180deg, #ffffff, #f8f9fa);
-    transition: all 0.3s ease;
-}
+  /* Adjust header for sidebar */
+  .navbar.sticky-top {
+    margin-left: 0;
+  }
 
-.dynamic-form-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-}
-
-/* =========================
-   ANIMATION (ENTRY)
-========================= */
-.form-animate {
-    animation: fadeSlide 0.6s ease-out both;
-}
-
-@keyframes fadeSlide {
-    from {
-        opacity: 0;
-        transform: translateY(24px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  /* Hide backdrop on desktop */
+  .offcanvas-backdrop {
+    display: none !important;
+  }
 }
 
-/* =========================
-   INPUT STYLING
-========================= */
-.form-control,
-.form-select {
-    border-radius: 10px;
-    padding: 10px 14px;
-    transition: all 0.2s ease;
+/* ---------- Responsive Adjustments ---------- */
+@media (max-width: 991.98px) {
+  .offcanvas {
+    padding-top: 0;
+  }
+
+  .d-flex.flex-fill.flex-grow-1 {
+    margin-left: 0;
+  }
 }
 
-.form-control:focus,
-.form-select:focus {
-    border-color: #4f46e5;
-    box-shadow: 0 0 0 0.15rem rgba(79,70,229,.25);
+/* ---------- Page Title Styles ---------- */
+.page-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-/* =========================
-   LABELS
-========================= */
-.form-label {
-    font-size: 0.85rem;
-    color: #374151;
-    margin-bottom: 4px;
+.page-title::before {
+  content: '';
+  width: 4px;
+  height: 28px;
+  background: var(--primary-gradient);
+  border-radius: 2px;
 }
 
-/* =========================
-   CHECKBOX & RADIO
-========================= */
-.form-check-input {
-    cursor: pointer;
+/* ---------- Breadcrumb Styles ---------- */
+.breadcrumb {
+  background: transparent;
+  padding: 0;
+  margin-bottom: 1rem;
 }
 
-.form-check-label {
-    cursor: pointer;
+.breadcrumb-item {
+  font-size: 0.875rem;
+  color: var(--gray-500);
 }
 
-/* =========================
-   ERROR STATES
-========================= */
-.border-danger {
-    border-color: #dc2626 !important;
+.breadcrumb-item a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: var(--transition);
 }
 
-.error-text {
-    color: #dc2626;
-    font-size: 0.75rem;
-    margin-top: 4px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+.breadcrumb-item a:hover {
+  color: var(--primary-dark);
 }
 
-/* Shake animation on error */
-.shake {
-    animation: shake 0.3s;
+.breadcrumb-item.active {
+  color: var(--gray-700);
+  font-weight: 500;
 }
 
-@keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-4px); }
-    50% { transform: translateX(4px); }
-    75% { transform: translateX(-4px); }
-    100% { transform: translateX(0); }
+.breadcrumb-item + .breadcrumb-item::before {
+  content: '›';
+  color: var(--gray-400);
 }
 
-/* =========================
-   BUTTONS
-========================= */
-.btn-primary {
-    border-radius: 10px;
-    padding: 10px 22px;
-    background: linear-gradient(135deg, #4f46e5, #6366f1);
-    border: none;
+/* ---------- Quick Stats Row ---------- */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
 }
 
-.btn-primary:hover {
-    background: linear-gradient(135deg, #4338ca, #4f46e5);
+/* ---------- Action Buttons Group ---------- */
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
-.btn-outline-secondary {
-    border-radius: 10px;
+.action-buttons .btn {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8rem;
 }
 
-/* =========================
-   MOBILE FIXES
-========================= */
-@media (max-width: 768px) {
-    .dynamic-form-card {
-        border-radius: 10px;
-    }
+/* ---------- Empty State ---------- */
+.empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--gray-500);
 }
 
+.empty-state-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
 
-/*  */
-/* END FORM */
-/*  */
+.empty-state h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin-bottom: 0.5rem;
+}
 
+.empty-state p {
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
 
+/* ---------- Doctor Card ---------- */
+.doctor-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  text-align: center;
+}
 
-/*  */
-/* DATATABLES */
-/*  */
-/* Header styling */
-table.dataTable thead th {
-    background-color: #0d6efd;
-    color: white;
+.doctor-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.doctor-card .avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--primary-gradient);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 auto 1rem;
+}
+
+.doctor-card .name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-bottom: 0.25rem;
+}
+
+.doctor-card .specialization {
+  font-size: 0.875rem;
+  color: var(--primary);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.doctor-card .hospital {
+  font-size: 0.8rem;
+  color: var(--gray-500);
+}
+
+/* ---------- Appointment Card ---------- */
+.appointment-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: var(--transition);
+  border-left: 4px solid var(--primary);
+}
+
+.appointment-card:hover {
+  transform: translateX(4px);
+  box-shadow: var(--shadow-md);
+}
+
+.appointment-card.confirmed {
+  border-left-color: var(--success);
+}
+
+.appointment-card.pending {
+  border-left-color: var(--warning);
+}
+
+.appointment-card.cancelled {
+  border-left-color: var(--danger);
+}
+
+.appointment-card .date-badge {
+  background: var(--gray-100);
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  text-align: center;
+  min-width: 60px;
+}
+
+.appointment-card .date-badge .day {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  line-height: 1;
+}
+
+.appointment-card .date-badge .month {
+  font-size: 0.75rem;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.appointment-card .appointment-info {
+  flex: 1;
+}
+
+.appointment-card .patient-name {
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-bottom: 0.25rem;
+}
+
+.appointment-card .time {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ---------- Schedule Grid ---------- */
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+}
+
+.schedule-day {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 1rem;
+  text-align: center;
+  border: 2px solid var(--gray-200);
+  transition: var(--transition);
+}
+
+.schedule-day:hover {
+  border-color: var(--primary);
+}
+
+.schedule-day.active {
+  background: var(--primary-gradient);
+  border-color: var(--primary);
+  color: var(--white);
+}
+
+.schedule-day .day-name {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+.schedule-day .day-number {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+/* ---------- Hospital Card ---------- */
+.hospital-card {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.hospital-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.hospital-card .hospital-image {
+  height: 160px;
+  background: var(--primary-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+}
+
+.hospital-card .hospital-body {
+  padding: 1.5rem;
+}
+
+.hospital-card .hospital-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 0.5rem;
+}
+
+.hospital-card .hospital-location {
+  font-size: 0.875rem;
+  color: var(--gray-500);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.hospital-card .hospital-stats {
+  display: flex;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--gray-200);
+}
+
+.hospital-card .stat {
+  text-align: center;
+  flex: 1;
+}
+
+.hospital-card .stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.hospital-card .stat-label {
+  font-size: 0.75rem;
+  color: var(--gray-500);
+}
+
+/* ---------- Form Section ---------- */
+.form-section {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+}
+
+.form-section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--gray-100);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ---------- Profile Avatar ---------- */
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--primary-gradient);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: 700;
+  margin: 0 auto;
+  box-shadow: 0 8px 24px rgba(8, 145, 178, 0.3);
+}
+
+/* ---------- Status Indicator ---------- */
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+}
+
+.status-indicator::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.status-indicator.online {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+}
+
+.status-indicator.online::before {
+  background: var(--success);
+}
+
+.status-indicator.offline {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+}
+
+.status-indicator.offline::before {
+  background: var(--danger);
+  animation: none;
+}
+
+.status-indicator.busy {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--warning);
+}
+
+.status-indicator.busy::before {
+  background: var(--warning);
+}
+
+/* ---------- Notification Badge ---------- */
+.notification-badge {
+  position: relative;
+}
+
+.notification-badge::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 12px;
+  height: 12px;
+  background: var(--danger);
+  border-radius: 50%;
+  border: 2px solid var(--white);
+  animation: pulse 2s infinite;
+}
+
+.notification-badge.count::after {
+  content: attr(data-count);
+  width: auto;
+  height: auto;
+  padding: 0.125rem 0.375rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--white);
+}
+
+/* ---------- Timeline ---------- */
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.5rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--gray-200);
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 1.5rem;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -1.5rem;
+  top: 0.25rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 3px solid var(--white);
+  box-shadow: 0 0 0 2px var(--primary);
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-time {
+  font-size: 0.75rem;
+  color: var(--gray-500);
+  margin-bottom: 0.25rem;
+}
+
+.timeline-content {
+  background: var(--white);
+  padding: 1rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---------- Quick Links ---------- */
+.quick-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.quick-link {
+  background: var(--white);
+  padding: 1.5rem 1rem;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  text-decoration: none;
+  color: var(--gray-700);
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.quick-link:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  color: var(--primary);
+}
+
+.quick-link .icon {
+  font-size: 2rem;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  background: rgba(8, 145, 178, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quick-link:hover .icon {
+  background: var(--primary-gradient);
+  color: var(--white);
+}
+
+.quick-link .label {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* ---------- Responsive Grid System ---------- */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 991.98px) {
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 575.98px) {
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ---------- Mobile Optimizations ---------- */
+@media (max-width: 575.98px) {
+  .page-title {
+    font-size: 1.35rem;
+  }
+
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .stat-card .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .welcome-card {
+    padding: 1.5rem;
+  }
+
+  .welcome-card h2 {
+    font-size: 1.35rem;
+  }
+
+  .form-section {
+    padding: 1.25rem;
+  }
+
+  .hospital-card .hospital-image {
+    height: 120px;
+    font-size: 3rem;
+  }
+
+  .appointment-card {
+    flex-direction: column;
     text-align: center;
-    vertical-align: middle;
-}
+  }
 
-/* Row hover */
-table.dataTable tbody tr:hover {
-    background-color: #f1f5ff;
+  .appointment-card .date-badge {
+    min-width: auto;
+  }
 }
-
-/* Pagination */
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-    padding: 6px 12px;
-    margin: 0 2px;
-    border-radius: 6px;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button.current {
-    background-color: #0d6efd !important;
-    color: #fff !important;
-    border: none;
-}
-
-/* Search input */
-.dataTables_wrapper .dataTables_filter input {
-    border-radius: 8px;
-    padding: 6px 10px;
-}
-
-/* Length dropdown */
-.dataTables_wrapper .dataTables_length select {
-    border-radius: 8px;
-    padding: 4px 8px;
-}
-/*  */
-/* END DATATABLES */
-/*  */

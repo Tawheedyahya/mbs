@@ -3,7 +3,7 @@
 
         <!-- Sidebar toggle (mobile) -->
         <button class="btn sidebar-toggle me-2" type="button" data-bs-toggle="offcanvas"
-            data-bs-target="#sidebar" aria-label="Open menu">
+            data-bs-target="#sidebar" aria-label="Open menu" >
             ☰
         </button>
 

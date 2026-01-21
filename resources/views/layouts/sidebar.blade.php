@@ -3,7 +3,6 @@
         <h5 class="offcanvas-title"></h5>
         <button type="button" class="btn-close btn-close-white mobile-only" data-bs-dismiss="offcanvas">
         </button>
-
     </div>
 
     <div class="offcanvas-body p-0">
@@ -29,7 +28,7 @@
                 <li class="nav-item mb-2">
                     <a class="nav-link
                         {{ request()->routeIs('doctor.schedule') ? 'active' : '' }}"
-                        href="#">
+                        href="{{route('doctor.schedule')}}">
                         Schedule
                     </a>
                 </li>

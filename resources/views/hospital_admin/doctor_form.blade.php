@@ -64,7 +64,7 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Gender</label>
                                 <br>
-                                <input type="radio" name="gender" value="male" @checked(old('gender', $doctor['gender'] ?? '') === 'male')>
+                                <input type="radio" name="gender" value="male" @checked(old('gender', $data['gender'] ?? '') =='male')>
                                 Male
 
                                 <input type="radio" name="gender" value="female" class="ms-4"

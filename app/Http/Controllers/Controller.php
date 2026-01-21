@@ -38,7 +38,7 @@ class Controller extends BaseController
     public function doctorcode()
     {
         do {
-            $code = Str::upper(Str::random(10));
+            $code = Str::upper(Str::random(20));
         } while (
             Doctor::where('doctor_code', $code)
             ->where('hospital_id', auth()->user()->hospital_id)

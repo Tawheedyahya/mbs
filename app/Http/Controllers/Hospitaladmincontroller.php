@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -146,7 +147,7 @@ class Hospitaladmincontroller extends Controller
     public function doctor_add(Request $request)
     {
         $id = $request->id;
-
+        // pr($request->status);
         $user_id = null;
         if ($id) {
             $user_id = User::where('doctor_id', $id)
@@ -211,8 +212,10 @@ class Hospitaladmincontroller extends Controller
             ]);
 
             $doctor->save();
+            $user = User::where('doctor_id', $doctor->id)
+                ->where('hospital_id', auth()->user()->hospital_id)
+                ->first();
 
-            $user = User::where('doctor_id', $doctor->id)->first();
             if (!$user) {
                 $user = new User();
                 $user->doctor_id = $doctor->id;
@@ -223,13 +226,14 @@ class Hospitaladmincontroller extends Controller
             $user->email = $validated['email'];
             $user->role = 'doctor';
             $user->hospital_id = auth()->user()->hospital_id;
-            $user->status = $request->status ?? false;
+            $user->status = $request->has('status') ? 1 : 0;
 
-            if (!empty($validated['password'])) {
-                $user->password = bcrypt($validated['password']);
+            if ($request->filled('password')) {
+                $user->password = bcrypt($request->password);
             }
 
             $user->save();
+
 
             DB::commit();
 
@@ -316,5 +320,30 @@ class Hospitaladmincontroller extends Controller
     public function canModifyDoctor(Doctor $doctor): bool
     {
         return $doctor->hospital_id === auth()->user()->hospital_id;
+    }
+    public function hospital_show($code)
+    {
+        $hospital = Hospital::where('hospital_code', $code)->first();
+        //   pr($hospital->toArray());
+        if (!$hospital || empty($hospital)) {
+            abort(404);
+        }
+        //   $specialization=Specialization::select('id','specialization','hospital_id')->where('hospital_id',$hospital->id)->get();
+        $doctor = DB::table('doctors as d')
+            ->join('specializations as s', 'd.specialization_id', '=', 's.id')->join('users as u','u.doctor_id','=','d.id')->where('u.status',1)
+            ->where('d.hospital_id', $hospital->id)
+            ->select(
+                'd.id',
+                'd.name',
+                'd.qualification',
+                'd.profile_photo',
+                'd.experience_years',
+                's.specialization',
+                's.description'
+            )
+            ->get();
+        return view('users.show_doctors', compact('doctor'));
+        //   pr($doctor->toArray());
+
     }
 }

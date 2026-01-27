@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -159,101 +160,133 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .danger-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            min-width: 300px;
+            max-width: 420px;
+            padding: 14px 18px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: #fff;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1080;
+
+            animation: danger-toast-in 0.4s ease forwards;
+        }
+
+        /* Animation */
+        @keyframes danger-toast-in {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
     </style>
 </head>
 
 <body>
-
-<div class="container">
-
-    <header class="page-header">
-        <h1>Our Doctors</h1>
-        <p>Choose your doctor and appointment date</p>
-    </header>
-
-    <div class="doctors-grid">
-
-        @foreach ($doctor as $doc)
-            <div class="doctor-card">
-
-                <div class="doctor-image">
-                    <img
-                        src="{{ Storage::disk('s3')->url($doc->profile_photo) }}"
-                        alt="{{ $doc->name }}"
-                        loading="lazy"
-                    >
-                </div>
-
-                <div class="doctor-info">
-
-                    <h3 class="doctor-name">{{ $doc->name }}</h3>
-
-                    <span class="specialization">
-                        {{ $doc->specialization }}
-                    </span>
-
-                    <p class="qualification">
-                        {{ $doc->qualification }}
-                    </p>
-
-                    <span class="experience-years">
-                        {{ $doc->experience_years }} Years Experience
-                    </span>
-
-                    <p class="description">
-                        {{ $doc->description }}
-                    </p>
-
-                    <!-- BOOKING FORM -->
-                    <form
-                        method="GET"
-                        action="{{ route('patient.booking', $doc->id) }}"
-                        class="booking-form"
-                    >
-                        <input
-                            type="date"
-                            name="date"
-                            class="date-input hidden"
-                            value="{{ now()->toDateString() }}"
-                            min="{{ now()->toDateString() }}"
-                            required
-                        >
-
-                        <button
-                            type="button"
-                            class="book-btn"
-                            onclick="handleBookingClick(this)"
-                        >
-                            Book Appointment
-                        </button>
-                    </form>
-
-                </div>
+    <div class="container">
+        @if (session('error'))
+            <div class="danger-toast">
+                <strong>❌ Error</strong> Doctors not available on this day
             </div>
-        @endforeach
+        @endif
+
+        <header class="page-header">
+            <h1>Our Doctors</h1>
+            <p>Choose your doctor and appointment date</p>
+        </header>
+
+        <div class="doctors-grid">
+
+            @foreach ($doctor as $doc)
+                <div class="doctor-card">
+
+                    <div class="doctor-image">
+                        <img src="{{ Storage::disk('s3')->url($doc->profile_photo) }}" alt="{{ $doc->name }}"
+                            loading="lazy">
+                    </div>
+
+                    <div class="doctor-info">
+
+                        <h3 class="doctor-name">{{ $doc->name }}</h3>
+
+                        <span class="specialization">
+                            {{ $doc->specialization }}
+                        </span>
+
+                        <p class="qualification">
+                            {{ $doc->qualification }}
+                        </p>
+
+                        <span class="experience-years">
+                            {{ $doc->experience_years }} Years Experience
+                        </span>
+
+                        <p class="description">
+                            {{ $doc->description }}
+                        </p>
+
+                        <!-- BOOKING FORM -->
+                        <form method="GET" action="{{ route('patient.booking', $doc->id) }}" class="booking-form">
+                            @php
+                                // Get today's date and calculate the range
+                                $today = now();
+                                $nextWeek = now()->addDays(7);
+                            @endphp
+                            <input type="date" name="date" class="date-input hidden"
+                                     min="{{ $today->toDateString() }}"
+       max="{{ $nextWeek->toDateString() }}"
+       value="{{ $today->toDateString() }}"  required>
+
+                            <button type="button" class="book-btn" onclick="handleBookingClick(this)">
+                                Book Appointment
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+            @endforeach
+
+        </div>
 
     </div>
 
-</div>
+    <!-- Minimal JS -->
+    <script>
+        function handleBookingClick(button) {
+            const form = button.closest('form');
+            const dateInput = form.querySelector('.date-input');
 
-<!-- Minimal JS -->
-<script>
-function handleBookingClick(button) {
-    const form = button.closest('form');
-    const dateInput = form.querySelector('.date-input');
+            // First click: show date picker
+            if (dateInput.classList.contains('hidden')) {
+                dateInput.classList.remove('hidden');
+                dateInput.focus();
+                button.innerText = 'Confirm Date';
+                return;
+            }
 
-    // First click: show date picker
-    if (dateInput.classList.contains('hidden')) {
-        dateInput.classList.remove('hidden');
-        dateInput.focus();
-        button.innerText = 'Confirm Date';
-        return;
-    }
-
-    // Second click: submit form
-    form.submit();
-}
-</script>
+            // Second click: submit form
+            form.submit();
+        }
+    </script>
+    <script>
+        setTimeout(() => {
+            const toast = document.querySelector('.danger-toast');
+            if (toast) toast.remove();
+        }, 4000);
+    </script>
 
 </body>
+
 </html>

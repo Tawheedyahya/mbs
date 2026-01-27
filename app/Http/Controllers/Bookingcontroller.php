@@ -17,17 +17,17 @@ class Bookingcontroller extends Controller
     public function booking(Request $request, $doctorId)
     {
         $date = $request->get('date');
-
+        $doctor=Doctor::findOrFail($doctorId);
         $day = \Carbon\Carbon::parse($date)->format('l');
 
         $schedule = DB::table('schedules')
             ->where('doctor_id', $doctorId)
             ->where('day', $day)
-            ->where('is_off', 0)
+            // ->where('is_off', 0)
             ->first();
         // Log::channel('doctor')->info("$schedule");
         // pr($schedule);
-        if (!$schedule) {
+        if ($schedule->is_off==1) {
             return back()->with('error', 'Doctor not available on this day');
         }
 
@@ -36,12 +36,12 @@ class Bookingcontroller extends Controller
             ->where('booking_date', $date)
             ->whereIn('status', ['pending', 'accepted'])
             ->get();
-
+        // pr($schedule);
         $slots = $this->generateAvailableSlots(
             $schedule->start_time,
             $schedule->end_time,
             $bookings,
-            5
+            $doctor->slot??10
         );
 
         return view('users.booking_form', compact(

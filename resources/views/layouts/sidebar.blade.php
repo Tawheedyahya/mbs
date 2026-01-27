@@ -20,8 +20,8 @@
 
                 <li class="nav-item mb-2">
                     <a class="nav-link
-                        {{ request()->routeIs('doctor.appointments*') ? 'active' : '' }}"
-                        href="#">
+                        {{ request()->routeIs('doctor.*bookings*') ? 'active' : '' }}"
+                        href="{{route('doctor.overall_bookings')}}">
                         Appointments
                     </a>
                 </li>

@@ -1659,3 +1659,148 @@ footer .container span {
     border: 1px solid #ddd;
   }
 }
+
+
+/* =====================================================
+   BRAND OVERRIDE — BLUE & WHITE MEDICAL THEME
+   ===================================================== */
+
+/* ---------- GLOBAL FONT ---------- */
+html, body,
+button, input, select, textarea {
+  font-family: "Open Sans", sans-serif !important;
+}
+
+/* ---------- COLOR TOKENS ---------- */
+:root {
+  --primary: #1363C6;
+  --primary-dark: #0f52a5;
+  --primary-light: #3b82f6;
+
+  /* Kill purple gradients */
+  --primary-gradient: linear-gradient(135deg, #1363C6 0%, #1363C6 100%);
+  --primary-gradient-hover: linear-gradient(135deg, #0f52a5 0%, #0f52a5 100%);
+
+  --accent: #1363C6;
+  --accent-gradient: linear-gradient(135deg, #1363C6, #1363C6);
+}
+
+/* ---------- BODY BACKGROUND ---------- */
+body {
+  background-color: #f4f7fb !important;
+  background-image: none !important;
+}
+
+/* Remove floating decorative SVGs */
+body::before,
+body::after,
+.main-wrapper::before,
+.main-wrapper::after {
+  display: none !important;
+}
+
+/* ---------- NAVBAR ---------- */
+.navbar {
+  background: #1363C6 !important;
+  box-shadow: 0 6px 18px rgba(19, 99, 198, 0.35) !important;
+}
+
+.navbar::before,
+.navbar::after {
+  display: none !important;
+}
+
+.navbar-brand,
+.navbar .me-3 {
+  color: #ffffff !important;
+}
+
+/* Sidebar toggle */
+.sidebar-toggle {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+}
+
+.sidebar-toggle:hover {
+  background: rgba(255, 255, 255, 0.28) !important;
+}
+
+/* Logout */
+.navbar .btn-outline-danger {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.navbar .btn-outline-danger:hover {
+  background: #dc2626 !important;
+}
+
+/* ---------- SIDEBAR ---------- */
+.offcanvas {
+  background: #0f172a !important; /* medical dark blue */
+}
+
+.offcanvas::before,
+.offcanvas::after {
+  display: none !important;
+}
+
+.offcanvas .nav-link.active {
+  background: #1363C6 !important;
+  box-shadow: none !important;
+}
+
+.offcanvas .nav-link::before {
+  background: #ffffff !important;
+}
+
+/* ---------- BUTTONS ---------- */
+.btn-primary {
+  background: #1363C6 !important;
+  box-shadow: 0 4px 14px rgba(19, 99, 198, 0.35) !important;
+}
+
+.btn-primary:hover {
+  background: #0f52a5 !important;
+}
+
+.btn-outline-primary {
+  border-color: #1363C6 !important;
+  color: #1363C6 !important;
+}
+
+.btn-outline-primary:hover {
+  background: #1363C6 !important;
+  color: #ffffff !important;
+}
+
+/* ---------- CARDS ---------- */
+.card {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+.card::before {
+  display: none !important;
+}
+
+/* ---------- TABLE ---------- */
+.table thead th {
+  background: #1363C6 !important;
+}
+
+.table thead th::after {
+  display: none !important;
+}
+
+/* ---------- FORM FOCUS ---------- */
+.form-control:focus,
+.form-select:focus {
+  border-color: #1363C6 !important;
+  box-shadow: 0 0 0 3px rgba(19, 99, 198, 0.2) !important;
+}
+
+/* ---------- SELECTION ---------- */
+::selection {
+  background: rgba(19, 99, 198, 0.2);
+}

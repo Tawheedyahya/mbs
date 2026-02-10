@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #1363c6;
             min-height: 100vh;
             padding: 20px;
             display: flex;
@@ -292,7 +292,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #1363c6;
             color: white;
         }
 
@@ -392,7 +392,7 @@
         }
 
         .step-dot.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #1363c6;
             animation: pulse 2s infinite;
         }
 
@@ -531,15 +531,15 @@
 
         <div class="status-message">
             @if($booking->status === 'unverified')
-                📧 Please check your email to verify
+                 Please check your email to verify
             @elseif($booking->status === 'pending')
-                ⏳ Awaiting doctor's approval
+                 Awaiting doctor's approval
             @elseif($booking->status === 'accepted')
-                ✅ Your appointment is confirmed!
+                 Your appointment is confirmed!
             @elseif($booking->status === 'rejected')
-                ❌ This appointment was declined
+                 This appointment was declined
             @elseif($booking->status === 'cancelled')
-                🚫 This appointment was cancelled
+                 This appointment was cancelled
             @endif
         </div>
     </div>

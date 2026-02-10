@@ -31,7 +31,7 @@
     @stack('styles')
 </head>
 
-<body>
+<body class="{{ auth()->check() && auth()->user()->email === 'abinav@soulcreationz.com' ? 'has-sidebar' : '' }}">
     @php
     use Illuminate\Support\Facades\Storage;
 @endphp
@@ -42,19 +42,18 @@
 
         <div class="d-flex flex-fill flex-grow-1">
 
-            {{-- SIDEBAR --}}
-            @include('layouts.sidebar')
+    {{-- SIDEBAR ONLY FOR ABINAV --}}
+    @if(auth()->check() && auth()->user()->email === 'abinav@soulcreationz.com')
+        @include('layouts.sidebar')
+    @endif
 
-            {{-- MAIN CONTENT --}}
-            <main class="flex-fill p-4">
-                <x-toast />
-                <div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3" style="z-index:1080">
-                </div>
+    {{-- MAIN CONTENT --}}
+    <main class="flex-fill p-4">
+        @yield('content')
+    </main>
 
-                @yield('content')
-            </main>
+</div>
 
-        </div>
 
         {{-- FOOTER --}}
         @include('layouts.footer')

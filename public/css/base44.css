@@ -1923,3 +1923,132 @@ table.dataTable thead .sorting_desc::after {
 /* ========================================
    END OF PREMIUM STYLES
    ======================================== */
+
+
+   /* ========================================
+   BRAND OVERRIDES – BLUE & WHITE THEME
+   ======================================== */
+
+/* Global font */
+body,
+button,
+input,
+select,
+textarea {
+  font-family: "Open Sans", sans-serif !important;
+}
+
+/* ===== PRIMARY COLOR OVERRIDE ===== */
+:root {
+  --primary: #1363C6;
+  --primary-dark: #0f52a5;
+  --primary-light: #3b82f6;
+
+  /* Force solid blue (remove purple gradients) */
+  --primary-gradient: linear-gradient(135deg, #1363C6 0%, #1363C6 100%);
+  --primary-gradient-hover: linear-gradient(135deg, #0f52a5 0%, #0f52a5 100%);
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+  background: #1363C6 !important;
+  box-shadow: 0 4px 16px rgba(19, 99, 198, 0.35) !important;
+}
+
+.navbar::before,
+.navbar::after {
+  display: none !important; /* remove shimmer & purple glow */
+}
+
+.navbar-brand,
+.navbar .me-3 {
+  color: #ffffff !important;
+}
+
+/* Sidebar toggle */
+.sidebar-toggle {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.sidebar-toggle:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Logout button */
+.navbar .btn-outline-danger {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.navbar .btn-outline-danger:hover {
+  background: #dc2626 !important;
+  border-color: transparent !important;
+}
+
+/* ===== FOOTER ===== */
+footer,
+.footer {
+  background: #1363C6 !important;
+  color: #ffffff !important;
+}
+
+footer::before {
+  display: none !important;
+}
+
+/* ===== BUTTONS ===== */
+.btn-primary {
+  background: #1363C6 !important;
+  box-shadow: 0 4px 14px rgba(19, 99, 198, 0.35) !important;
+}
+
+.btn-primary:hover {
+  background: #0f52a5 !important;
+}
+
+.btn-outline-primary {
+  border-color: #1363C6 !important;
+  color: #1363C6 !important;
+}
+
+.btn-outline-primary:hover {
+  background: #1363C6 !important;
+  color: #ffffff !important;
+}
+
+/* ===== BADGES ===== */
+.badge.bg-primary {
+  background: #1363C6 !important;
+}
+
+/* ===== TABLE HEADER ===== */
+.table thead th {
+  background: #1363C6 !important;
+}
+
+.table thead th::after {
+  display: none !important;
+}
+
+/* ===== LINKS ===== */
+a {
+  color: #1363C6;
+}
+
+a:hover {
+  color: #0f52a5;
+}
+
+/* ===== FORM FOCUS ===== */
+.form-control:focus,
+.form-select:focus {
+  border-color: #1363C6 !important;
+  box-shadow: 0 0 0 3px rgba(19, 99, 198, 0.2) !important;
+}
+
+/* ===== SELECTION ===== */
+::selection {
+  background: rgba(19, 99, 198, 0.2);
+}

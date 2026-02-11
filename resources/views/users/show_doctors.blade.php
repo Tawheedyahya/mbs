@@ -18,7 +18,7 @@
 
         body {
             font-family: "Open Sans", sans-serif;
-            background: #1363C6;
+            background: #ffff;
             min-height: 100vh;
             padding: 30px 16px;
         }
@@ -31,7 +31,7 @@
         .page-header {
             text-align: center;
             margin-bottom: 40px;
-            color: white;
+            color: #1363C6;
         }
 
         .page-header h1 {

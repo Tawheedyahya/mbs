@@ -45,9 +45,12 @@
     <div class="container-fluid">
 
         <!-- BRAND / ROLE -->
-        <a class="navbar-brand" href="#">
-            {{ str_replace('_',' ', ucwords(auth()->user()->role)) }}
-        </a>
+        <a class="navbar-brand d-flex align-items-center gap-3" href="#">
+    <span class="fw-bold">Speedbots.io</span>
+    <span class="fw-semibold">
+        {{ str_replace('_',' ', ucwords(auth()->user()->role)) }}
+    </span>
+</a>
 
         <!-- MOBILE TOGGLE -->
         <button class="navbar-toggler text-white"

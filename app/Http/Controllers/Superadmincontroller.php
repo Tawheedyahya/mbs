@@ -46,6 +46,7 @@ class Superadmincontroller extends Controller
             'email' => ['type' => 'text', 'label' => 'Email'],
             'password' => ['type' => 'password', 'label' => 'Password'],
             'hospital_name' => ['type' => 'text', 'label' => 'Hospital name'],
+            'flow_id'=>['type'=>'text','label'=>'Flow Id'],
             'hospital_phone' => ['type' => 'tel', 'label' => 'Hospital phone'],
             'admin_name' => ['type' => 'text'],
             'admin_phone' => ['type' => 'tel', 'label' => 'Admin phone'],
@@ -112,6 +113,7 @@ class Superadmincontroller extends Controller
             'city' => 'required|string',
             'country' => 'required|string',
             'db_status' => 'required',
+            'flow_id'=>'nullable|string',
 
             'hospital_logo' => $hospital_id
                 ? 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048'
@@ -187,6 +189,7 @@ class Superadmincontroller extends Controller
                     'country' => $request->country,
                     'db_status' => $request->db_status,
                     'hospital_logo' => $logoPath,
+                    'flow_id'=>$request->flow_id
                 ]);
             } else {
                 $hospital = Hospital::create([
@@ -202,6 +205,7 @@ class Superadmincontroller extends Controller
                     'country' => $request->country,
                     'db_status' => $request->db_status,
                     'hospital_logo' => $logoPath,
+                    'flow_id'=>$request->flow_id
                 ]);
             }
 
@@ -222,7 +226,7 @@ class Superadmincontroller extends Controller
             ->join('users as u', 'u.hospital_id', '=', 'h.id')->where('role','hospital_admin')
             ->where('h.id', $id)
             ->select(
-                'u.id as id',
+                'h.id as id',
                 'u.email as email',
                 'h.hospital_name as hospital_name',
                 'h.hospital_phone as hospital_phone',
@@ -234,7 +238,8 @@ class Superadmincontroller extends Controller
                 'h.country as country',
                 'h.db_status as db_status',
                 'u.status as is_active',
-                'h.hospital_logo as hospital_logo'
+                'h.hospital_logo as hospital_logo',
+                'h.flow_id as flow_id'
             )
             ->first();
         // pr((array)$data);
@@ -257,7 +262,7 @@ class Superadmincontroller extends Controller
         ]);
 
         $hospital_check = Hospital::findOrFail($id);
-
+// return 'hi';
         $user_check = User::where('hospital_id', $hospital_check->id)
             ->where('role', 'hospital_admin')
             ->first();
@@ -279,12 +284,13 @@ class Superadmincontroller extends Controller
             'country'        => 'required|string',
             'db_status'      => 'required|in:0,1',
             'password'       => 'nullable|min:6',
+            'flow_id'   =>'nullable',
             'hospital_logo'  => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         DB::beginTransaction();
 
-        try {
+        // try {
 
             $hospital = Hospital::findOrFail($id);
 
@@ -316,6 +322,7 @@ class Superadmincontroller extends Controller
                 'city'           => $request->city,
                 'country'        => $request->country,
                 'db_status'      => $request->db_status,
+                'flow_id'=>$request->flow_id
             ];
 
             if ($request->hasFile('hospital_logo')) {
@@ -346,7 +353,7 @@ class Superadmincontroller extends Controller
             return redirect()
                 ->back()
                 ->with('success', 'Hospital updated successfully');
-        } catch (\Throwable $e) {
+        // } catch (\Throwable $e) {
 
             DB::rollBack();
 
@@ -360,7 +367,7 @@ class Superadmincontroller extends Controller
             return redirect()
                 ->back()
                 ->with('error', 'Something went wrong. Please try again.');
-        }
+        // }
     }
 
 

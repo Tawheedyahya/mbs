@@ -13,10 +13,6 @@ WORKDIR /var/www
 
 # Copy application
 COPY . .
-
-# Copy compiled assets
-COPY --from=node-builder /app/public/build /var/www/public/build
-
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 

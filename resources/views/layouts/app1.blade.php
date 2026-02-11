@@ -19,10 +19,11 @@
     <link rel="stylesheet" href__="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
     {{-- END DATATABLES --}}
 
-    <link rel="stylesheet" href="{{ asset('css/claude.css') }}">
+<link rel="stylesheet" href="{{ asset('css/claude.css') }}?v={{ filemtime(public_path('css/claude.css')) }}">
     {{-- END DATATABLES --}}
     {{-- manual js --}}
-    <script src="{{ asset('js/manual.js') }}" defer></script>
+<script src="{{ asset('js/claude.js') }}?v={{ filemtime(public_path('js/claude.js')) }}" defer></script>
+
     {{-- end --}}
     {{-- NICE SELECT --}}
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">

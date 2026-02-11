@@ -8,7 +8,7 @@
 
             <div class="card shadow-sm">
                 <div class="card-body">
-
+                    {{-- <h2>{{$data['id']}}</h2> --}}
                     <form action="{{ route('super_admin.hospital_edit', $data['id']) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
@@ -82,6 +82,16 @@
                                 @enderror
                             </div>
 
+                             <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Flow id</label>
+                                <input type="text" name="flow_id"
+                                    class="form-control @error('flow_id') is-invalid @enderror"
+                                    value="{{ old('flow_id', $data['flow_id'] ?? '') }}">
+                                @error('flow_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                             {{-- City --}}
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">City</label>
@@ -94,6 +104,15 @@
                             </div>
 
                             {{-- Country --}}
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Country</label>
+                                <input type="text" name="country"
+                                    class="form-control @error('country') is-invalid @enderror"
+                                    value="{{ old('country', $data['country'] ?? '') }}">
+                                @error('country')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Country</label>
                                 <input type="text" name="country"

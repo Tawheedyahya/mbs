@@ -8,6 +8,7 @@ use App\Models\Schedule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class Doctorcontroller extends Controller
@@ -102,10 +103,8 @@ class Doctorcontroller extends Controller
     }
     public function update_status(Request $request, $id)
     {
-        // Retrieve the booking by ID
         $booking = Booking::find($id);
 
-        // If booking is not found, return a 404 error with a message
         if (!$booking) {
             return response()->json([
                 'msg' => 'Booking not found',
@@ -113,19 +112,44 @@ class Doctorcontroller extends Controller
             ], 404);
         }
 
-        // Check if the doctor_id matches the authenticated user's doctor_id
         if ($booking->doctor_id != auth()->user()->doctor_id) {
             return response()->json([
                 'msg' => 'Authorization error',
                 'success' => false
-            ], 403);  // 403 Forbidden if unauthorized
+            ], 403);
         }
 
-        // Update the booking status from the request
         $booking->status = $request->status;
-        $booking->save();  // Save the updated status
+        $booking->save();
 
-        // Return success response
+        try {
+            $hospital = \App\Models\Hospital::find($booking->hospital_id);
+
+            if ($hospital && $hospital->token && $hospital->flow_id) {
+
+                // Use phone number directly as contact_id
+                $contactId = $booking->patient_phone;
+
+                \Log::channel('doctor')->info('Speedbots sending flow', [
+                    'contact_id' => $contactId,
+                    'flow_id' => $hospital->flow_id,
+                ]);
+
+                $flowResponse = Http::withHeaders([
+                    'X-ACCESS-TOKEN' => $hospital->token,
+                ])->post("https://app.speedbots.io/api/contacts/{$contactId}/send/{$hospital->flow_id}");
+
+                \Log::channel('doctor')->info('Speedbots flow response', [
+                    'status' => $flowResponse->status(),
+                    'body' => $flowResponse->json(),
+                ]);
+            }
+        } catch (\Exception $e) {
+            \Log::channel('doctor')->error('Speedbots API error', [
+                'message' => $e->getMessage(),
+            ]);
+        }
+
         return response()->json([
             'msg' => 'Booking status updated successfully.',
             'success' => true,

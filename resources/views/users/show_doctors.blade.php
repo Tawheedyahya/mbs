@@ -236,7 +236,9 @@
                         <p class="description">
                             {{ $doc->description }}
                         </p>
-
+                        <?php
+                        $phone_no=$_GET['phone_no']??null;
+                        ?>
                         <!-- BOOKING FORM -->
                         <form method="GET" action="{{ route('patient.booking', $doc->id) }}" class="booking-form">
                             @php
@@ -248,6 +250,7 @@
                                      min="{{ $today->toDateString() }}"
        max="{{ $nextWeek->toDateString() }}"
        value="{{ $today->toDateString() }}"  required>
+        <input type="hidden" name="phone_no" value="{{ $phone_no }}">
 
                             <button type="button" class="book-btn" onclick="handleBookingClick(this)">
                                 Book Appointment

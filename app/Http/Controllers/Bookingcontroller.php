@@ -17,6 +17,7 @@ class Bookingcontroller extends Controller
     public function booking(Request $request, $doctorId)
     {
         $date = $request->get('date');
+        $phone_no=$request->get('phone_no')??null;
         $doctor=Doctor::findOrFail($doctorId);
         $day = \Carbon\Carbon::parse($date)->format('l');
 
@@ -25,6 +26,9 @@ class Bookingcontroller extends Controller
             ->where('day', $day)
             // ->where('is_off', 0)
             ->first();
+        if(!$schedule){
+            return back()->with('error', 'Doctor not available on this day');
+        }
         // Log::channel('doctor')->info("$schedule");
         // pr($schedule);
         if ($schedule->is_off==1) {
@@ -47,7 +51,8 @@ class Bookingcontroller extends Controller
         return view('users.booking_form', compact(
             'doctorId',
             'date',
-            'slots'
+            'slots',
+            'phone_no'
         ));
     }
 

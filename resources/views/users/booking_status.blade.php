@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #fff;
             min-height: 100vh;
             padding: 20px;
             display: flex;
@@ -23,7 +23,7 @@
 
         .card {
             width: 100%;
-            max-width: 500px;
+            max-width: 800px;
             background: #fff;
             border-radius: 24px;
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
@@ -68,7 +68,7 @@
 
         /* Status Colors */
         .status-header.pending {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            background: #1363c6;
         }
         .status-header.accepted {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
@@ -292,7 +292,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #1363c6;
             color: white;
         }
 
@@ -392,7 +392,7 @@
         }
 
         .step-dot.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #1363c6;
             animation: pulse 2s infinite;
         }
 
@@ -527,19 +527,19 @@
         </div>
 
         <div class="status-text">Appointment Status</div>
-        <div class="status-label">{{ strtoupper($booking->status) }}</div>
+        <div class="status-label">{{ ucfirst(strtolower($booking->status)) }}</div>
 
         <div class="status-message">
             @if($booking->status === 'unverified')
-                📧 Please check your email to verify
+                 Please check your email to verify
             @elseif($booking->status === 'pending')
-                ⏳ Awaiting doctor's approval
+                 Awaiting doctor's approval
             @elseif($booking->status === 'accepted')
-                ✅ Your appointment is confirmed!
+                 Your appointment is confirmed!
             @elseif($booking->status === 'rejected')
-                ❌ This appointment was declined
+                 This appointment was declined
             @elseif($booking->status === 'cancelled')
-                🚫 This appointment was cancelled
+                 This appointment was cancelled
             @endif
         </div>
     </div>
@@ -582,35 +582,35 @@
 
         <div class="info-list">
             <div class="info-item">
-                <div class="info-icon doctor">
+                <!-- <div class="info-icon doctor">
                     <svg viewBox="0 0 24 24">
                         <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                     </svg>
-                </div>
+                </div> -->
                 <div class="info-content">
                     <div class="info-label">Doctor</div>
-                    <div class="info-value">{{ $booking->doctor_name }}</div>
+                    <div class="info-value">{{ ucfirst(strtolower($booking->doctor_name)) }}</div>
                 </div>
             </div>
 
             <div class="info-item">
-                <div class="info-icon hospital">
+                <!-- <div class="info-icon hospital">
                     <svg viewBox="0 0 24 24">
                         <path d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z"/>
                     </svg>
-                </div>
+                </div> -->
                 <div class="info-content">
                     <div class="info-label">Hospital</div>
-                    <div class="info-value">{{ $booking->hospital_name }}</div>
+                    <div class="info-value">{{ ucfirst(strtolower($booking->hospital_name)) }}</div>
                 </div>
             </div>
 
             <div class="info-item">
-                <div class="info-icon date">
+                <!-- <div class="info-icon date">
                     <svg viewBox="0 0 24 24">
                         <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM9 10H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm-8 4H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z"/>
                     </svg>
-                </div>
+                </div> -->
                 <div class="info-content">
                     <div class="info-label">Date</div>
                     <div class="info-value">{{ $booking->booking_date }}</div>
@@ -618,11 +618,11 @@
             </div>
 
             <div class="info-item">
-                <div class="info-icon time">
+                <!-- <div class="info-icon time">
                     <svg viewBox="0 0 24 24">
                         <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
                     </svg>
-                </div>
+                </div> -->
                 <div class="info-content">
                     <div class="info-label">Time</div>
                     <div class="info-value">{{ \Carbon\Carbon::parse($booking->start_time)->format('h:i A') }}</div>
@@ -630,14 +630,14 @@
             </div>
 
             <div class="info-item">
-                <div class="info-icon patient">
+                <!-- <div class="info-icon patient">
                     <svg viewBox="0 0 24 24">
                         <path d="M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 10c2.7 0 5.8 1.29 6 2H6c.23-.72 3.31-2 6-2m0-12C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                     </svg>
-                </div>
+                </div> -->
                 <div class="info-content">
                     <div class="info-label">Patient Name</div>
-                    <div class="info-value">{{ $booking->patient_name }}</div>
+                    <div class="info-value">{{ ucwords(strtolower($booking->patient_name)) }}</div>
                 </div>
             </div>
         </div>

@@ -193,7 +193,7 @@
                         </div>
 
                         <div class="text-end">
-                            <button type="submit" class="btn btn-primary px-4">
+                            <button type="submit" class="btn btn-primary px-4" style="background-color: #1363C6;">
                                 Update Hospital
                             </button>
                         </div>

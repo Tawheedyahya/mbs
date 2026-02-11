@@ -2,25 +2,41 @@
 @section('title','Overall Patient Bookings')
 
 @section('content')
-
 <style>
+/* =========================
+   DOCTOR BOOKINGS – CLEAN PROFESSIONAL UI
+   ========================= */
+
 .booking-container {
-    padding: 30px;
-    background: #f0f2f5;
+    padding: 28px;
+    background: #f4f7fb;
     min-height: 100vh;
 }
 
-.page-header h1 {
-    font-size: 1.8rem;
-    font-weight: 700;
+/* ---------- Page Header ---------- */
+.page-header {
+    margin-bottom: 20px;
 }
 
+.page-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.page-header p {
+    color: #6b7280;
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
+/* ---------- Search Box ---------- */
 .search-box {
-    background: #fff;
-    padding: 15px;
+    background: #ffffff;
+    padding: 16px;
     border-radius: 12px;
-    margin-bottom: 25px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-bottom: 26px;
+    box-shadow: 0 6px 16px rgba(19, 99, 198, 0.08);
 }
 
 .search-row {
@@ -29,124 +45,216 @@
     flex-wrap: wrap;
 }
 
+.search-row .form-control {
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
+
+/* ---------- Booking Grid ---------- */
 .booking-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(320px,1fr));
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
     gap: 20px;
 }
 
+/* ---------- Booking Card ---------- */
 .booking-card {
-    background: #fff;
+    background: #ffffff;
     border-radius: 16px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    box-shadow: 0 8px 24px rgba(19, 99, 198, 0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.booking-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 34px rgba(19, 99, 198, 0.18);
+}
+
+/* ---------- Card Top ---------- */
 .card-top {
-    padding: 20px;
+    padding: 18px;
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid #eee;
+    align-items: center;
+    border-bottom: 1px solid #eef2f7;
 }
 
 .date-box {
-    background: linear-gradient(135deg,#667eea,#764ba2);
-    color: #fff;
-    padding: 12px;
-    border-radius: 12px;
+    background: #1363C6;
+    color: #ffffff;
+    padding: 10px 12px;
+    border-radius: 10px;
     text-align: center;
+    min-width: 60px;
 }
 
+.date-box div {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.date-box small {
+    font-size: 0.7rem;
+    opacity: 0.9;
+}
+
+.card-top strong {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: #374151;
+}
+
+/* ---------- Status Badge ---------- */
 .status-badge {
     padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
+    border-radius: 16px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.4px;
 }
 
-.status-badge.pending { background:#fff3e0;color:#f57c00; }
-.status-badge.accepted { background:#e8f5e9;color:#2e7d32; }
-.status-badge.rejected { background:#ffebee;color:#c62828; }
+.status-badge.pending {
+    background: #fff7ed;
+    color: #c2410c;
+}
 
-.card-body { padding: 20px; }
+.status-badge.accepted {
+    background: #ecfdf5;
+    color: #047857;
+}
 
+.status-badge.rejected {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+/* ---------- Card Body ---------- */
+.card-body {
+    padding: 18px;
+}
+
+/* ---------- Patient Row ---------- */
 .patient-row {
     display: flex;
     gap: 12px;
-    margin-bottom: 15px;
+    align-items: center;
+    margin-bottom: 14px;
 }
 
 .patient-avatar {
-    width: 45px;
-    height: 45px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    background: linear-gradient(135deg,#667eea,#764ba2);
-    color: #fff;
+    background: #1363C6;
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
+    font-size: 0.95rem;
 }
 
+.patient-row strong {
+    font-size: 0.9rem;
+    color: #1f2937;
+}
+
+.patient-row small {
+    color: #6b7280;
+    font-size: 0.75rem;
+}
+.btn-secondary {
+    background: #e6f0ff;
+    color: #1363C6;
+    border: 2px solid #1363C6;
+}
+.btn-secondary:hover {
+    background: #1363C6;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(19, 99, 198, 0.25);
+}
+/* ---------- Info Chips ---------- */
 .info-chip {
-    background: #f5f5f5;
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 0.8rem;
+    background: #f1f5f9;
+    padding: 5px 10px;
+    border-radius: 7px;
+    font-size: 0.75rem;
+    color: #374151;
     display: inline-block;
-    margin-bottom: 8px;
+    margin: 3px 5px 5px 0;
 }
 
+/* ---------- Actions ---------- */
 .action-btns {
     display: flex;
-    gap: 10px;
+    gap: 8px;
+    margin-top: 12px;
 }
 
 .btn-action {
     flex: 1;
-    padding: 12px;
-    border-radius: 10px;
+    padding: 10px;
+    border-radius: 8px;
     border: none;
     font-weight: 600;
+    font-size: 0.85rem;
     cursor: pointer;
 }
 
-.btn-accept { background:linear-gradient(135deg,#11998e,#38ef7d);color:#fff; }
-.btn-reject { background:linear-gradient(135deg,#eb3349,#f45c43);color:#fff; }
-
-.approved-msg {
-    text-align:center;
-    padding:12px;
-    background:#e8f5e9;
-    color:#2e7d32;
-    border-radius:10px;
-    font-weight:600;
+.btn-accept {
+    background: #1363C6;
+    color: #ffffff;
 }
 
+.btn-accept:hover {
+    background: #0f52a5;
+}
+
+.btn-reject {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+.btn-reject:hover {
+    background: #dc2626;
+}
+
+/* ---------- Status Messages ---------- */
+.approved-msg,
 .rejected-msg {
-    text-align:center;
-    padding:12px;
-    background:#ffebee;
-    color:#c62828;
-    border-radius:10px;
-    font-weight:600;
+    text-align: center;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.85rem;
 }
 
+/* ---------- Empty State ---------- */
 .empty-state {
-    text-align:center;
-    padding:60px;
-    color:#777;
+    text-align: center;
+    padding: 60px 28px;
+    color: #6b7280;
 }
+
+.empty-state h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+
 </style>
 
 <div class="booking-container">
 
 <div class="page-header">
-    <h1>📅 Patient Bookings</h1>
+    <h1> Patient Bookings</h1>
     <p>Showing {{ $booking_list->count() }} records</p>
 </div>
 
-{{-- 🔍 SEARCH / FILTER --}}
+{{--  SEARCH / FILTER --}}
 <div class="search-box">
 <form method="GET">
     <div class="search-row">
@@ -201,8 +309,8 @@
         </div>
     </div>
 
-    <div class="info-chip">📞 {{ $booking->patient_phone }}</div>
-    <div class="info-chip">🎂 {{ $booking->age }} yrs</div><br>
+    <div class="info-chip"> {{ $booking->patient_phone }}</div>
+    <div class="info-chip"> {{ $booking->age }} yrs</div><br>
     <div class="info-chip"> {{ $booking->cause }}</div>
 
 
@@ -220,7 +328,7 @@
 
 @elseif($booking->status === 'accepted')
     <div class="approved-msg">
-        ✅ Booking Accepted
+        Booking Accepted
         <br><br>
         <button class="btn-action btn-reject"
             onclick="updateStatus({{ $booking->id }}, 'rejected')">
@@ -230,7 +338,7 @@
 
 @elseif($booking->status === 'rejected')
     <div class="rejected-msg">
-        ❌ Booking Rejected
+         Booking Rejected
         <br><br>
         <button class="btn-action btn-accept"
             onclick="updateStatus({{ $booking->id }}, 'accepted')">

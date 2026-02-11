@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #ffff;
             min-height: 100vh;
             padding: 20px;
             display: flex;
@@ -53,7 +53,7 @@
         .header-icon {
             width: 70px;
             height: 70px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #1363C6;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -91,10 +91,10 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, #e0e7ff 0%, #f0e6ff 100%);
+            background: #1363C6;
             padding: 10px 20px;
             border-radius: 30px;
-            color: #5a67d8;
+            color: white;
             font-weight: 600;
             font-size: 15px;
             animation: fadeIn 0.8s ease-out 0.3s both;
@@ -175,7 +175,7 @@
             left: 50%;
             width: 0;
             height: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #1363C6;
             border-radius: 50%;
             transform: translate(-50%, -50%);
             transition: width 0.4s ease, height 0.4s ease;
@@ -188,13 +188,13 @@
         }
 
         .slot label:hover {
-            border-color: #667eea;
+            border-color: #1363C6;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
         }
 
         .slot input:checked+label {
-            border-color: #667eea;
+            border-color: #1363C6;
             color: white;
         }
 
@@ -286,7 +286,7 @@
             margin-top: 25px;
             border: none;
             border-radius: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #1363C6;
             color: white;
             font-size: 17px;
             font-weight: 700;
@@ -425,10 +425,10 @@
             </div>
             <h2>Book Appointment</h2>
             <div class="date-badge">
-                <svg viewBox="0 0 24 24">
+                <!-- <svg viewBox="0 0 24 24">
                     <path
                         d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z" />
-                </svg>
+                </svg> -->
                 {{ $date }}
             </div>
         </div>
@@ -609,7 +609,7 @@
 
                     <a href="/booking/status/${data.booking_code}"
                        style="display:inline-block;margin-top:20px;
-                              background:#667eea;color:#fff;
+                              background:#1363c6;color:#fff;
                               padding:12px 25px;border-radius:10px;
                               text-decoration:none;font-weight:600">
                         Check Booking Status

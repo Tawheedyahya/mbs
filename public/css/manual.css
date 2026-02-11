@@ -32,9 +32,12 @@
   }
 
   /* Adjust main content for sidebar */
-  .d-flex.flex-fill.flex-grow-1 {
+ @media (min-width: 992px) {
+  body.has-sidebar .d-flex.flex-fill.flex-grow-1 {
     margin-left: 260px;
   }
+}
+
 
   /* Adjust header for sidebar */
   .navbar.sticky-top {
@@ -668,4 +671,93 @@
   .appointment-card .date-badge {
     min-width: auto;
   }
+}
+
+
+/* =====================================================
+   BRAND OVERRIDE — MEDICAL BLUE (APPLIES TO manual.css)
+   ===================================================== */
+
+/* ---------- GLOBAL FONT ---------- */
+html, body,
+button, input, select, textarea {
+  font-family: "Open Sans", sans-serif !important;
+}
+
+/* ---------- CORE TOKENS ---------- */
+:root {
+  --primary: #1363C6;
+  --primary-dark: #0f52a5;
+  --primary-light: #3b82f6;
+
+  /* Replace all gradients with solid blue */
+  --primary-gradient: linear-gradient(135deg, #1363C6, #1363C6);
+  --primary-gradient-hover: linear-gradient(135deg, #0f52a5, #0f52a5);
+
+  --accent: #1363C6;
+  --accent-gradient: linear-gradient(135deg, #1363C6, #1363C6);
+}
+
+/* ---------- REMOVE DECORATIVE NOISE ---------- */
+body {
+  background: #f4f7fb !important;
+  background-image: none !important;
+}
+
+body::before,
+body::after,
+.main-wrapper::before,
+.main-wrapper::after {
+  display: none !important;
+}
+
+/* ---------- PAGE TITLE ---------- */
+.page-title::before {
+  background: #1363C6 !important;
+}
+
+/* ---------- CARDS ---------- */
+.doctor-card,
+.hospital-card,
+.appointment-card,
+.form-section,
+.quick-link {
+  box-shadow: 0 6px 18px rgba(19, 99, 198, 0.12) !important;
+}
+
+/* ---------- HOSPITAL / DOCTOR AVATARS ---------- */
+.doctor-card .avatar,
+.hospital-card .hospital-image,
+.profile-avatar {
+  background: #1363C6 !important;
+}
+
+/* ---------- APPOINTMENT STATUS ---------- */
+.appointment-card {
+  border-left-color: #1363C6 !important;
+}
+
+/* ---------- ACTIVE STATES ---------- */
+.schedule-day.active,
+.quick-link:hover .icon {
+  background: #1363C6 !important;
+}
+
+/* ---------- SIDEBAR (manual.css compatible) ---------- */
+.offcanvas {
+  background: #0f172a !important;
+}
+
+.offcanvas .nav-link.active {
+  background: #1363C6 !important;
+  box-shadow: none !important;
+}
+
+/* ---------- LINKS ---------- */
+a {
+  color: #1363C6;
+}
+
+a:hover {
+  color: #0f52a5;
 }

@@ -5,30 +5,32 @@
 
 /* ---------- CSS Variables ---------- */
 :root {
-  /* Primary Gradient Colors */
-  --primary: #667eea;
-  --primary-dark: #5a67d8;
-  --primary-light: #7c3aed;
-  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --primary-gradient-hover: linear-gradient(135deg, #5a67d8 0%, #6b21a8 100%);
+  /* Brand (Blue) */
+  --primary: #1363C6;
+  --primary-dark: #0f52a5;
+  --primary-light: #3b82f6;
 
-  /* Secondary Colors */
-  --secondary: #f093fb;
-  --secondary-dark: #c026d3;
-  --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  /* Make gradients also BLUE (so your UI stays consistent) */
+  --primary-gradient: linear-gradient(135deg, #1363C6 0%, #1363C6 100%);
+  --primary-gradient-hover: linear-gradient(135deg, #0f52a5 0%, #0f52a5 100%);
 
-  /* Accent Colors */
-  --accent: #4facfe;
-  --accent-light: #00f2fe;
-  --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  /* Secondary (keep simple, optional) */
+  --secondary: #1363C6;
+  --secondary-dark: #0f52a5;
+  --secondary-gradient: linear-gradient(135deg, #1363C6 0%, #1363C6 100%);
 
-  /* Healthcare Colors */
-  --medical-blue: #0ea5e9;
+  /* Accent (same blue) */
+  --accent: #1363C6;
+  --accent-light: #5aa7ff;
+  --accent-gradient: linear-gradient(135deg, #1363C6 0%, #1363C6 100%);
+
+  /* Healthcare Colors (you can keep these) */
+  --medical-blue: #1363C6;
   --medical-teal: #14b8a6;
   --medical-green: #22c55e;
   --medical-red: #ef4444;
 
-  /* Status Colors */
+  /* Status Colors (keep) */
   --success: #10b981;
   --success-light: #34d399;
   --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
@@ -36,8 +38,8 @@
   --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
   --danger: #ef4444;
   --danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  --info: #3b82f6;
-  --info-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  --info: #1363C6;
+  --info-gradient: linear-gradient(135deg, #1363C6 0%, #1363C6 100%);
 
   /* Neutral Colors */
   --dark: #1e293b;
@@ -54,19 +56,14 @@
   --gray-50: #f8fafc;
   --white: #ffffff;
 
-  /* Glass Effect */
-  --glass-bg: rgba(255, 255, 255, 0.95);
-  --glass-border: rgba(255, 255, 255, 0.2);
-  --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
-
-  /* Shadows */
+  /* Shadows (update glow to match brand blue) */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
   --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  --shadow-glow: 0 0 40px rgba(102, 126, 234, 0.4);
-  --shadow-glow-accent: 0 0 40px rgba(79, 172, 254, 0.4);
+  --shadow-glow: 0 0 40px rgba(19, 99, 198, 0.35);
+  --shadow-glow-accent: 0 0 40px rgba(19, 99, 198, 0.35);
 
   /* Border Radius */
   --radius-sm: 0.375rem;
@@ -83,9 +80,15 @@
   --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-  /* Fonts */
-  --font-sans: 'Inter', 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Font */
+  --font-sans: "Open Sans", sans-serif;
 }
+
+html, body,
+button, input, select, textarea {
+  font-family: var(--font-sans) !important;
+}
+
 
 /* ---------- Keyframe Animations ---------- */
 @keyframes float {

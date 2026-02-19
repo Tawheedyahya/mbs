@@ -60,6 +60,9 @@ Route::middleware(['auth', 'role:doctor'])->prefix('doctor')->name('doctor.')->g
         Route::get('/overall_bookings','overall_bookings')->name('overall_bookings');
         Route::post('/bookings/{id}/update-status','update_status')->name('bookings.updatestatus');
         Route::post('/add_slot','add_slot')->name('add_slot');
+            // Reschedule booking
+        Route::post('/bookings/{id}/reschedule', [Doctorcontroller::class, 'reschedule'])
+        ->name('bookings.reschedule');
     });
 });
 Route::post('/test', [Superadmincontroller::class, 'test'])->name('test');

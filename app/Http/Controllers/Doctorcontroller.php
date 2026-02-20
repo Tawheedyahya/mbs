@@ -467,20 +467,39 @@ class Doctorcontroller extends Controller
                 'new_status' => $newStatus
             ]);
 
-            $response = Http::timeout(10) // Set 10 second timeout
-                ->withHeaders([
-                    'X-ACCESS-TOKEN' => $hospital->token,
-                    'Content-Type' => 'application/json'
-                ])
-                ->post("https://app.speedbots.io/api/contacts/{$contactId}/send/{$hospital->flow_id}", [
-                    'booking_id' => $booking->id,
-                    'status' => $newStatus,
-                    'old_status' => $oldStatus,
-                    'patient_name' => $booking->patient_name,
-                    'booking_date' => $booking->booking_date,
-                    'start_time' => $booking->start_time,
-                    'additional_data' => $additionalData
-                ]);
+            // Update status custom field (591719)
+
+
+// Update date custom field (244056)
+$dateResponse = Http::timeout(10)
+    ->withHeaders([
+        'X-ACCESS-TOKEN' => $hospital->token,
+        'Content-Type' => 'application/x-www-form-urlencoded'
+    ])
+    ->asForm()
+    ->post("https://app.speedbots.io/api/contacts/{$contactId}/custom_fields/244056", [
+        'value' => $booking->booking_date
+    ]);
+
+// Update message custom field (947818)
+$response = Http::timeout(10)
+    ->withHeaders([
+        'X-ACCESS-TOKEN' => $hospital->token,
+        'Content-Type' => 'application/x-www-form-urlencoded'
+    ])
+    ->asForm()
+    ->post("https://app.speedbots.io/api/contacts/{$contactId}/custom_fields/947818", [
+        'value' => $booking->patient_name
+    ]);
+    $statusResponse = Http::timeout(10)
+    ->withHeaders([
+        'X-ACCESS-TOKEN' => $hospital->token,
+        'Content-Type' => 'application/x-www-form-urlencoded'
+    ])
+    ->asForm()
+    ->post("https://app.speedbots.io/api/contacts/{$contactId}/custom_fields/591719", [
+        'value' => $newStatus
+    ]);
 
             // Log response
             if ($response->successful()) {

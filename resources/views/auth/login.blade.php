@@ -35,6 +35,19 @@
             padding:50px 40px;
             box-sizing:border-box;
         ">
+            <div style="margin-bottom:20px;">
+    <img src="{{asset('logo/Gemini_Generated_Image_umceniumceniumce.png')}}"
+         alt="Healthcare Logo"
+         style="
+            width:180px;
+            height:auto;
+            display:block;
+            background:#ffffff;
+            padding:12px 18px;
+            border-radius:14px;
+            box-shadow:0 6px 18px rgba(0,0,0,0.15);
+         ">
+</div>
             <h2 style="
                 margin:0 0 12px 0;
                 font-size:26px;
@@ -62,6 +75,8 @@
                 <li>Patient Medical Records</li>
                 <li>Doctor & Staff Access</li>
                 <li>Secure Healthcare Data</li>
+
+
             </ul>
         </div>
 

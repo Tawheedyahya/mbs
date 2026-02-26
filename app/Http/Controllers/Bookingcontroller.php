@@ -125,7 +125,14 @@ class Bookingcontroller extends Controller
         } while (
             DB::table('bookings')->where('action_token', $actionToken)->exists()
         );
-
+        DB::table('patients')->updateOrInsert(
+            ['phone_no'=>$request->patient_phone],
+            [
+            'name'=>$request->patient_name,
+            'age'=>$request->age,
+            'updated_at' => now(),
+            'created_at' => now(),
+        ]);
         DB::table('bookings')->insert([
             'hospital_id'   => $doctor->hospital_id,
             'doctor_id'     => $doctorId,
@@ -148,6 +155,7 @@ class Bookingcontroller extends Controller
             'updated_at'    => now(),
         ]);
 
+
         // 📧 SEND EMAIL
         // Mail::to($request->patient_email)->send(
         //     new BookingVerificationMail($actionToken)
@@ -156,7 +164,7 @@ class Bookingcontroller extends Controller
         return response()->json([
             'success' => true,
             'booking_code' => $actionToken,
-            'message' => 'Please check your email to confirm booking'
+            'message' => 'Booking confirmed'
         ]);
     }
     public function verify($token)

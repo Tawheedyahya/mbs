@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('specializations', function (Blueprint $table) {
+        //
+        Schema::create('patients',function(Blueprint $table){
             $table->id();
-            $table->foreignId('hospital_id')->constrained('hospitals')->cascadeOnDelete();
-            $table->string('specialization');
+            $table->string('name');
+            $table->string('phone_no')->unique();
+            $table->string('age')->nullable();
+            $table->enum('gender',['male','female','others','none'])->default('none');
             $table->timestamps();
         });
     }
@@ -24,6 +27,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('specializations');
+        //
+        Schema::dropIfExists('patients');
     }
 };

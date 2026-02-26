@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Inpersonrequest;
 use App\Models\Doctor;
 use App\Models\Hospital;
 use App\Models\Specialization;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class Hospitaladmincontroller extends Controller
@@ -345,5 +347,49 @@ class Hospitaladmincontroller extends Controller
         return view('users.show_doctors', compact('doctor'));
         //   pr($doctor->toArray());
 
+    }
+    public function in_person_form(){
+    $hospitalId = auth()->user()->hospital->id;
+    $doctors = Doctor::select('id','name')->where('hospital_id',$hospitalId)->get();
+        return view('hospital_admin.inperson',compact('doctors'));
+    }
+        public function ajax_Store(Inpersonrequest $request)
+    {
+        // dd(Auth::user()->hospital->id);
+
+        do {
+            $actionToken = 'BK-' . strtoupper(Str::random(8));
+        } while (
+            DB::table('bookings')->where('action_token', $actionToken)->exists()
+        );
+        DB::table('patients')->updateOrInsert(
+            ['phone_no'=>$request->patient_phone],
+            [
+            'name'=>$request->patient_name,
+            'age'=>$request->age,
+            'updated_at' => now(),
+            'created_at' => now(),
+        ]);
+        DB::table('bookings')->insert([
+            'hospital_id'   => Auth::user()->hospital->id,
+            'doctor_id'     => $request->doctor_id,
+            'patient_name'  => $request->patient_name,
+            'patient_email' => $request->patient_email??null,
+            'patient_phone' => $request->patient_phone,
+            'age' => $request->age ?? null,
+            'cause' => $request->cause ?? null,
+
+            'booking_date'  => $request->booking_date,
+            'start_time'    => $request->start_time,
+            'end_time'      => null,
+
+            // 🔥 IMPORTANT CHANGE
+            'status'        => 'pending',
+            'action_token'  => $actionToken,
+
+            'created_at'    => now(),
+            'updated_at'    => now(),
+        ]);
+        return back()->with('success','booking successfully');
     }
 }

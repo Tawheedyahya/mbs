@@ -30,6 +30,7 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('super_admin')->name('su
 });
 Route::middleware(['auth', 'role:hospital_admin'])->prefix('hospital_admin')->name('hospital_admin.')->group(function () {
     Route::controller(Hospitaladmincontroller::class)->group(function () {
+        Route::post('/bookings/ajax_store','ajax_store')->name('inperson');
         Route::get('/dashboard', 'index')->name('dashboard');
         Route::get('/doctors_add', 'add_doctor_view')->name('doctors_add_view');
         Route::get('/doctor_form', 'doctor_form')->name('doctors_form');
@@ -41,6 +42,7 @@ Route::middleware(['auth', 'role:hospital_admin'])->prefix('hospital_admin')->na
         Route::post('/specialization_add', 'specialization_add')->name('specialization_add');
         Route::post('/specialization_delete', 'specialization_delete')->name('specialization_delete');
         Route::post('/specialization_edit', 'specialization_edit')->name('specialization_edit');
+        Route::get('/in_person_form','in_person_form')->name('inpersonform');
     });
 });
 Route::get('/hospital_booking/{hospital_code}', [Hospitaladmincontroller::class, 'hospital_show']);
@@ -60,6 +62,7 @@ Route::middleware(['auth', 'role:doctor'])->prefix('doctor')->name('doctor.')->g
         Route::get('/overall_bookings','overall_bookings')->name('overall_bookings');
         Route::post('/bookings/{id}/update-status','update_status')->name('bookings.updatestatus');
         Route::post('/add_slot','add_slot')->name('add_slot');
+
             // Reschedule booking
         Route::post('/bookings/{id}/reschedule', [Doctorcontroller::class, 'reschedule'])
         ->name('bookings.reschedule');

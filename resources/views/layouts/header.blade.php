@@ -86,6 +86,7 @@
                             Schedule
                         </a>
                     </li>
+
                 @endcan
 
                 {{-- SUPER ADMIN --}}
@@ -132,6 +133,12 @@
                         <a class="nav-link {{ request()->routeIs('hospital_admin.specialization*') ? 'active' : '' }}"
                            href="{{ route('hospital_admin.specialization') }}">
                             Specialization
+                        </a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('hospital_admin.inpersonform') ? 'active' : '' }}"
+                           href="{{ route('hospital_admin.inpersonform') }}">
+                            In person
                         </a>
                     </li>
 

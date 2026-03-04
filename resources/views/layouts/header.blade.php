@@ -143,9 +143,10 @@
                     </li>
 
                     <!-- ✅ ADDED: OVERALL BOOKINGS -->
+
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('hospital_admin.bookings*') ? 'active' : '' }}"
-                           href="#">
+                        <a class="nav-link {{ request()->routeIs('hospital_admin.*bookings*') ? 'active' : '' }}"
+                        href="{{route('hospital_admin.overall_bookings')}}">
                             Overall Bookings
                         </a>
                     </li>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Bookingcontroller;
+use App\Http\Controllers\Caseentrycontroller;
 use App\Http\Controllers\Doctorcontroller;
 use App\Http\Controllers\Hospitaladmincontroller;
 use App\Http\Controllers\Superadmincontroller;
@@ -70,6 +71,14 @@ Route::middleware(['auth', 'role:doctor'])->prefix('doctor')->name('doctor.')->g
             // Reschedule booking
         Route::post('/bookings/{id}/reschedule', [Doctorcontroller::class, 'reschedule'])
         ->name('bookings.reschedule');
+    });
+});
+Route::middleware(['auth','role:doctor'])->prefix('doctor')->name('doctor.')->group(function(){
+    Route::controller(Caseentrycontroller::class)->group(function(){
+            // Case Entry Routes
+    Route::get('/bookings/{booking}/case-entry',  'create')->name('doctor.case_entry.create');
+    Route::post('/bookings/{booking}/case-entry', 'store')->name('doctor.case_entry.store');
+    Route::get('/case-entry/{caseEntry}','show')->name('case_entry.show');
     });
 });
 Route::post('/test', [Superadmincontroller::class, 'test'])->name('test');

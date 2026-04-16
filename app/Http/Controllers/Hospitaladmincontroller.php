@@ -727,7 +727,7 @@ class Hospitaladmincontroller extends Controller
         $request->validate([
             'name'       => 'required|string|max:255',
             'code'       => 'nullable|string|max:100',
-            'category'   => 'required|in:consultation,treatment,operation,medicine,other',
+            'category'   => 'required|in:consultation,treatment,operation,other',
             'base_price' => 'required|numeric|min:0',
             'is_active'  => 'nullable|boolean',
         ]);
@@ -749,7 +749,7 @@ class Hospitaladmincontroller extends Controller
         $request->validate([
             'name'       => 'required|string|max:255',
             'code'       => 'nullable|string|max:100',
-            'category'   => 'required|in:consultation,treatment,operation,medicine,other',
+            'category'   => 'required|in:consultation,treatment,operation,other',
             'base_price' => 'required|numeric|min:0',
             'is_active'  => 'nullable|boolean',
         ]);

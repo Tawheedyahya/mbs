@@ -100,7 +100,7 @@
                         <div class="mb-3">
                             <label class="form-label">Category</label>
                             <select name="category" class="form-select" required>
-                                @foreach(['consultation','treatment','operation','medicine','other'] as $category)
+                                @foreach(['consultation','treatment','operation','other'] as $category)
                                     <option value="{{ $category }}" @selected($treatment->category === $category)>
                                         {{ ucfirst($category) }}
                                     </option>
@@ -162,7 +162,6 @@
                             <option value="consultation">Consultation</option>
                             <option value="treatment" selected>Treatment</option>
                             <option value="operation">Operation</option>
-                            <option value="medicine">Medicine</option>
                             <option value="other">Other</option>
                         </select>
                     </div>

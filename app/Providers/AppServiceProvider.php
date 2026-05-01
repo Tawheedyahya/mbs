@@ -17,6 +17,10 @@ class AppServiceProvider extends ServiceProvider
             return $user->role === 'super_admin';
         });
 
+        Gate::define('hospital_super_admin', function ($user) {
+            return $user->role === 'hospital_super_admin';
+        });
+
         Gate::define('hospital_admin', function ($user) {
             return $user->role === 'hospital_admin';
         });
@@ -29,6 +33,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('admin_or_doctor', function ($user) {
             return in_array($user->role, [
                 'super_admin',
+                'hospital_super_admin',
                 'hospital_admin',
                 'doctor'
             ]);

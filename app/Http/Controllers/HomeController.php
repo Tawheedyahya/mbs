@@ -28,6 +28,7 @@ class HomeController extends Controller
         // dd($role);
         return match($role){
             'super_admin'=>redirect()->route('super_admin.dashboard'),
+            'hospital_super_admin'=>redirect()->route('hospital_super_admin.dashboard'),
             'hospital_admin'=>redirect()->route('hospital_admin.dashboard'),
             'doctor'=>redirect()->route('doctor.dashboard'),
             default=>abort(403),

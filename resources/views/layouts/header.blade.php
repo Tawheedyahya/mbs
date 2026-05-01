@@ -110,9 +110,41 @@
                     </li>
 
                     <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('super_admin.hospital_super_admins*') ? 'active' : '' }}"
+                        href="{{ route('super_admin.hospital_super_admins.index') }}">
+                            Hospital Super Admins
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('super_admin.enquiries*') ? 'active' : '' }}"
                            href="#">
                             View Enquiry
+                        </a>
+                    </li>
+                @endcan
+
+                {{-- HOSPITAL SUPER ADMIN --}}
+                @can('hospital_super_admin')
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('hospital_super_admin.dashboard') ? 'active' : '' }}"
+                        href="{{ route('hospital_super_admin.dashboard') }}">
+                            Dashboard
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('hospital_super_admin.analytics') ? 'active' : '' }}"
+                        href="{{ route('hospital_super_admin.analytics') }}">
+                            Analytics
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('hospital_super_admin.hospitals*') ? 'active' : '' }}"
+                        href="{{ route('hospital_super_admin.hospitals.index') }}">
+                            View Hospitals
                         </a>
                     </li>
                 @endcan

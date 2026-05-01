@@ -164,6 +164,30 @@
                 </li>
             @endcan
 
+            {{-- HOSPITAL SUPER ADMIN --}}
+            @can('hospital_super_admin')
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('hospital_super_admin.dashboard') ? 'active' : '' }}"
+                    href="{{ route('hospital_super_admin.dashboard') }}">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('hospital_super_admin.analytics') ? 'active' : '' }}"
+                    href="{{ route('hospital_super_admin.analytics') }}">
+                        Analytics
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('hospital_super_admin.hospitals') ? 'active' : '' }}"
+                    href="{{ route('hospital_super_admin.hospitals') }}">
+                        View Hospitals
+                    </a>
+                </li>
+            @endcan
+
             {{-- HOSPITAL ADMIN --}}
             @can('hospital_admin')
                 <li class="nav-item">

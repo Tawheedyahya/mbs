@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\ClientGroup;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -43,5 +44,9 @@ class User extends Authenticatable
     }
     public function hospital(){
         return $this->belongsTo(Hospital::class,'hospital_id','id');
+    }
+
+    public function clientGroup(){
+        return $this->belongsTo(ClientGroup::class,'client_group_id','id');
     }
 }

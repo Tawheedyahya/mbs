@@ -23,6 +23,8 @@
                             {{ $doctorName }}!
                         @elseif ($doctor && $doctor->role === 'super_admin')
                             Admin {{ $doctorName }}!
+                        @elseif ($doctor && $doctor->role === 'hospital_super_admin')
+                            Hospital Super Admin {{ $doctorName }}!
                         @else
                             {{ $doctorName }}!
                         @endif

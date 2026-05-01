@@ -4,6 +4,7 @@ use App\Http\Controllers\Bookingcontroller;
 use App\Http\Controllers\Caseentrycontroller;
 use App\Http\Controllers\Doctorcontroller;
 use App\Http\Controllers\Hospitaladmincontroller;
+use App\Http\Controllers\HospitalSuperAdminController;
 use App\Http\Controllers\Superadmincontroller;
 use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\PatientController;
@@ -23,7 +24,7 @@ Route::get('/', fn() => redirect()->route('login'));
 //  SHARED
 // ══════════════════════════════════════════════════════════
 
-Route::middleware(['auth', 'role:super_admin,hospital_admin,doctor'])->group(function () {
+Route::middleware(['auth', 'role:super_admin,hospital_admin,doctor,hospital_super_admin'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 });
 
@@ -44,6 +45,32 @@ Route::middleware(['auth', 'role:super_admin'])
             Route::put('/hospital_edit/{id}',       'edit_hospital')->name('hospital_edit');
             Route::post('/hospital_delete',         'delete_hospital')->name('hospital_delete');
             Route::get('/delete_s3',                'delete_s3');
+
+            Route::get('/hospital-super-admins',              'hospitalSuperAdmins')->name('hospital_super_admins.index');
+            Route::get('/hospital-super-admins/create',       'createHospitalSuperAdmin')->name('hospital_super_admins.create');
+            Route::post('/hospital-super-admins',             'storeHospitalSuperAdmin')->name('hospital_super_admins.store');
+            Route::get('/hospital-super-admins/{id}',         'showHospitalSuperAdmin')->name('hospital_super_admins.show');
+            Route::get('/hospital-super-admins/{id}/edit',    'editHospitalSuperAdmin')->name('hospital_super_admins.edit');
+            Route::put('/hospital-super-admins/{id}',         'updateHospitalSuperAdmin')->name('hospital_super_admins.update');
+            Route::delete('/hospital-super-admins/{id}',      'deleteHospitalSuperAdmin')->name('hospital_super_admins.delete');
+            Route::post('/hospital-super-admins/{id}/access', 'updateHospitalSuperAdminAccess')->name('hospital_super_admins.access.update');
+        });
+    });
+
+
+// ══════════════════════════════════════════════════════════
+//  HOSPITAL SUPER ADMIN
+// ══════════════════════════════════════════════════════════
+
+Route::middleware(['auth', 'role:hospital_super_admin'])
+    ->prefix('hospital-super-admin')
+    ->name('hospital_super_admin.')
+    ->group(function () {
+        Route::controller(HospitalSuperAdminController::class)->group(function () {
+            Route::get('/dashboard', 'dashboard')->name('dashboard');
+            Route::get('/analytics', 'analytics')->name('analytics');
+            Route::get('/hospitals', 'hospitals')->name('hospitals.index');
+            Route::get('/hospitals/{id}', 'showHospital')->name('hospitals.show');
         });
     });
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Hospital;
 use App\Models\User;
+use App\Models\ClientGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -449,5 +450,147 @@ class Superadmincontroller extends Controller
         $k = Storage::disk('s3')->files('hospital_logos');
         Storage::disk('s3')->delete($k);
         return response()->json($path);
+    }
+
+    public function hospitalSuperAdmins()
+    {
+        $admins = User::where('role', 'hospital_super_admin')
+            ->with('clientGroup.hospitals')
+            ->latest()
+            ->get();
+
+        return view('super_admin.hospital_super_admins_index', compact('admins'));
+    }
+
+    public function createHospitalSuperAdmin()
+    {
+        $hospitals = Hospital::orderBy('hospital_name')->get();
+
+        return view('super_admin.hospital_super_admins_create', compact('hospitals'));
+    }
+
+    public function storeHospitalSuperAdmin(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6',
+            'hospital_ids' => 'required|array|min:1',
+            'hospital_ids.*' => 'exists:hospitals,id',
+            'status' => 'nullable',
+        ]);
+
+        DB::transaction(function () use ($data, $request) {
+            $group = ClientGroup::create([
+                'name' => $data['name'] . ' Group',
+                'status' => 1,
+            ]);
+
+            $group->hospitals()->sync($data['hospital_ids']);
+
+            User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'role' => 'hospital_super_admin',
+                'client_group_id' => $group->id,
+                'hospital_id' => null,
+                'status' => $request->has('status') ? 1 : 0,
+                'api_code' => $this->uniquecode('user'),
+            ]);
+        });
+
+        return redirect()
+            ->route('super_admin.hospital_super_admins_index')
+            ->with('success', 'Hospital super admin added successfully.');
+    }
+
+    public function showHospitalSuperAdmin($id)
+    {
+        $admin = User::where('role', 'hospital_super_admin')
+            ->with('clientGroup.hospitals')
+            ->findOrFail($id);
+
+        $hospitals = Hospital::orderBy('hospital_name')->get();
+
+        return view('super_admin.hospital_super_admins_show', compact('admin', 'hospitals'));
+    }
+
+    public function editHospitalSuperAdmin($id)
+    {
+        $admin = User::where('role', 'hospital_super_admin')->findOrFail($id);
+
+        return view('super_admin.hospital_super_admins_edit', compact('admin'));
+    }
+
+    public function updateHospitalSuperAdmin(Request $request, $id)
+    {
+        $admin = User::where('role', 'hospital_super_admin')->findOrFail($id);
+
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $admin->id,
+            'password' => 'nullable|string|min:6',
+            'status' => 'nullable',
+        ]);
+
+        $admin->name = $data['name'];
+        $admin->email = $data['email'];
+        $admin->status = $request->has('status') ? 1 : 0;
+
+        if (!empty($data['password'])) {
+            $admin->password = Hash::make($data['password']);
+        }
+
+        $admin->save();
+
+        return redirect()
+            ->route('super_admin.hospital_super_admins_show', $admin->id)
+            ->with('success', 'Hospital super admin updated successfully.');
+    }
+
+    public function updateHospitalSuperAdminAccess(Request $request, $id)
+    {
+        $admin = User::where('role', 'hospital_super_admin')
+            ->with('clientGroup')
+            ->findOrFail($id);
+
+        $data = $request->validate([
+            'hospital_ids' => 'required|array|min:1',
+            'hospital_ids.*' => 'exists:hospitals,id',
+        ]);
+
+        if (!$admin->clientGroup) {
+            $admin->clientGroup()->create([
+                'name' => $admin->name . ' Group',
+                'status' => 1,
+            ]);
+
+            $admin->refresh();
+        }
+
+        $admin->clientGroup->hospitals()->sync($data['hospital_ids']);
+
+        return redirect()
+            ->route('super_admin.hospital_super_admins_show', $admin->id)
+            ->with('success', 'Hospital access updated successfully.');
+    }
+
+    public function deleteHospitalSuperAdmin($id)
+    {
+        $admin = User::where('role', 'hospital_super_admin')->findOrFail($id);
+
+        $group = $admin->clientGroup;
+
+        $admin->delete();
+
+        if ($group) {
+            $group->hospitals()->detach();
+            $group->delete();
+        }
+
+        return redirect()
+            ->route('super_admin.hospital_super_admins_index')
+            ->with('success', 'Hospital super admin deleted successfully.');
     }
 }

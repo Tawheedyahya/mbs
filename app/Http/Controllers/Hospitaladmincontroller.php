@@ -1668,6 +1668,11 @@ class Hospitaladmincontroller extends Controller
             'appointment_date_field_id'=> 'nullable|string|max:100',
             'appointment_time_field_id'=> 'nullable|string|max:100',
             'booking_code_field_id'    => 'nullable|string|max:100',
+            'summary_whatsapp'         => 'nullable|string|max:500',
+            'summary_flow_id'          => 'nullable|string|max:100',
+            'summary_field_id'         => 'nullable|string|max:100',
+            'summary_email'            => 'nullable|string|max:500',
+            'report_email'             => 'nullable|string|max:500',
         ]);
 
         $hospital->update([
@@ -1681,6 +1686,11 @@ class Hospitaladmincontroller extends Controller
             'appointment_date_field_id' => $request->appointment_date_field_id,
             'appointment_time_field_id' => $request->appointment_time_field_id,
             'booking_code_field_id'     => $request->booking_code_field_id,
+            'summary_whatsapp'          => $request->summary_whatsapp,
+            'summary_flow_id'           => $request->summary_flow_id,
+            'summary_field_id'          => $request->summary_field_id,
+            'summary_email'             => $request->summary_email,
+            'report_email'              => $request->report_email,
         ]);
 
         Log::channel('hospital_admin')->info('Speedbots settings updated', [

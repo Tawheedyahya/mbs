@@ -283,6 +283,65 @@
                 </div>
                 @endif
 
+                {{-- ── Notification Recipients ── --}}
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header fw-semibold py-3" style="background:#065f46;color:#fff;">
+                        📨 Notification Recipients
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted small mb-3">
+                            Configure who receives the <strong>daily 8AM appointment summary</strong> and
+                            <strong>weekly financial report</strong>.
+                            Separate multiple numbers/emails with a comma.
+                        </p>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">📱 Daily Summary — Speedbots Flow ID</label>
+                            <input type="text" name="summary_flow_id"
+                                class="form-control @error('summary_flow_id') is-invalid @enderror"
+                                placeholder="e.g. 1774503512345"
+                                value="{{ old('summary_flow_id', $hospital->summary_flow_id ?? '') }}">
+                            <small class="text-muted">Create a flow in Speedbots for the daily appointment summary and paste its ID here.</small>
+                            @error('summary_flow_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">📝 Daily Summary — Custom Field ID</label>
+                            <input type="text" name="summary_field_id"
+                                class="form-control @error('summary_field_id') is-invalid @enderror"
+                                placeholder="e.g. 915759"
+                                value="{{ old('summary_field_id', $hospital->summary_field_id ?? '') }}">
+                            <small class="text-muted">Speedbots custom field ID where the summary text is stored before the flow is triggered.</small>
+                            @error('summary_field_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">📱 Daily Summary — WhatsApp Number(s)</label>
+                            <input type="text" name="summary_whatsapp"
+                                class="form-control @error('summary_whatsapp') is-invalid @enderror"
+                                placeholder="e.g. 60173411778, 60184603889"
+                                value="{{ old('summary_whatsapp', $hospital->summary_whatsapp ?? '') }}">
+                            <small class="text-muted">Sent every day at 8AM. Include country code, no + sign.</small>
+                            @error('summary_whatsapp')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">📧 Daily Summary — Email(s)</label>
+                            <input type="text" name="summary_email"
+                                class="form-control @error('summary_email') is-invalid @enderror"
+                                placeholder="e.g. admin@klinikhellodoctor.com, staff@klinikhellodoctor.com"
+                                value="{{ old('summary_email', $hospital->summary_email ?? '') }}">
+                            <small class="text-muted">Sent every day at 8AM alongside WhatsApp.</small>
+                            @error('summary_email')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">📊 Weekly Financial Report — Email(s)</label>
+                            <input type="text" name="report_email"
+                                class="form-control @error('report_email') is-invalid @enderror"
+                                placeholder="e.g. nazirul@klinikhellodoctor.com, marketing@klinikhellodoctor.com"
+                                value="{{ old('report_email', $hospital->report_email ?? '') }}">
+                            <small class="text-muted">Sent every Monday morning — outlet breakdown, revenue, no-show rate.</small>
+                            @error('report_email')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Submit --}}
                 <div class="d-flex gap-2">
                     <button type="submit" class="btn px-4 fw-semibold" style="background:#1363C6;color:#fff;">

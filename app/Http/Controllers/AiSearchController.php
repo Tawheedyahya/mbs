@@ -28,7 +28,7 @@ class AiSearchController extends Controller
         $queryText = $request->input('query');
 
         try {
-            $response = Http::timeout(30)->post(config('services.ai_search.url') . '/query', [
+            $response = Http::timeout(30)->post(rtrim(config('services.ai_search.url'), '/') . '/query', [
                 'hospital_id' => $user->hospital_id,
                 'query' => $queryText,
                 'today' => now()->toDateString(),

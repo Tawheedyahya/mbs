@@ -1,14 +1,12 @@
 @extends('layouts.app1')
 
 @section('content')
+
 @php
     $totalHospitals = count($hospitals);
     $totalDoctors = collect($hospitals)->sum('doctors');
     $totalBookings = collect($hospitals)->sum('bookings');
-    $totalPending = collect($hospitals)->sum('pending');
-    $totalCompleted = collect($hospitals)->sum('completed');
     $totalIncome = collect($hospitals)->sum('income');
-    $totalNet = collect($hospitals)->sum('net');
 @endphp
 
 <style>
@@ -17,164 +15,151 @@
     }
 
     .analytics-container {
-        max-width: 1320px;
-        margin: 0 auto;
-        padding: 32px 20px;
-    }
-
-    .page-heading {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        margin-bottom: 24px;
+        max-width: 1400px;
+        margin: auto;
+        padding: 24px;
     }
 
     .page-heading h2 {
-        font-weight: 800;
-        color: #111827;
-        margin-bottom: 6px;
+        font-weight: 700;
+        margin-bottom: 4px;
     }
 
     .page-heading p {
         color: #64748b;
-        margin-bottom: 0;
+        margin-bottom: 20px;
     }
 
+    /* SUMMARY */
     .summary-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 18px;
-        margin-bottom: 28px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+        margin-bottom: 30px;
     }
 
     .summary-card {
         background: #fff;
-        border: 1px solid #e8eef6;
-        border-radius: 18px;
-        padding: 20px;
-        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+        padding: 18px;
+        border-radius: 14px;
+        border: 1px solid #e5eaf2;
     }
 
     .summary-label {
+        font-size: 13px;
         color: #64748b;
-        font-size: 14px;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
     }
 
     .summary-value {
-        font-size: 28px;
-        font-weight: 800;
-        color: #1363C6;
+        font-size: 26px;
+        font-weight: 700;
     }
 
-    .summary-value.green {
-        color: #088b50;
+    .green {
+        color: #16a34a;
     }
 
-    .section-title {
-        font-size: 18px;
-        font-weight: 800;
-        color: #111827;
-        margin-bottom: 16px;
-    }
-
+    /* HOSPITAL GRID */
     .hospital-grid {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 22px;
+        grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+        gap: 20px;
     }
 
+    /* CARD */
     .hospital-card {
         background: #fff;
-        border: 1px solid #e8eef6;
-        border-radius: 20px;
-        padding: 22px;
-        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+        border-radius: 16px;
+        padding: 18px;
+        border: 1px solid #e5eaf2;
     }
 
     .hospital-top {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        margin-bottom: 18px;
+        margin-bottom: 14px;
     }
 
     .hospital-name {
-        font-size: 20px;
-        font-weight: 800;
-        color: #111827;
+        font-weight: 700;
+        font-size: 18px;
     }
 
     .status-pill {
-        background: #e8f1ff;
-        color: #1363C6;
-        padding: 6px 12px;
+        background: #e0edff;
+        color: #2563eb;
+        padding: 4px 10px;
         border-radius: 999px;
-        font-size: 13px;
-        font-weight: 700;
+        font-size: 12px;
+        font-weight: 600;
     }
 
-    .stats-grid {
+    /* INNER LAYOUT */
+    .hospital-body {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        grid-template-columns: 1fr 1fr;
         gap: 14px;
+    }
+
+    /* LEFT */
+    .main-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
     }
 
     .stat-box {
         background: #f8fafc;
-        border-radius: 14px;
-        padding: 16px;
-        border: 1px solid #eef2f7;
+        padding: 12px;
+        border-radius: 10px;
+        text-align: center;
     }
 
-    .stat-label {
-        font-size: 13px;
+    .stat-box div:first-child {
+        font-size: 12px;
         color: #64748b;
-        margin-bottom: 8px;
     }
 
     .stat-value {
-        font-size: 22px;
-        font-weight: 800;
-        color: #111827;
+        font-weight: 700;
+        font-size: 18px;
     }
 
-    .stat-value.blue {
-        color: #1363C6;
+    /* RIGHT */
+    .status-list {
+        display: grid;
+        gap: 8px;
     }
 
-    .stat-value.green {
-        color: #088b50;
-        font-size: 20px;
+    .status-item {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        padding: 8px 10px;
+        border-radius: 8px;
+        font-weight: 600;
     }
+
+    .pending { background: #fff7ed; color: #c2410c; }
+    .accepted { background: #ecfdf5; color: #047857; }
+    .completed { background: #eff6ff; color: #1d4ed8; }
+    .rescheduled { background: #faf5ff; color: #7c3aed; }
+    .rejected { background: #fef2f2; color: #b91c1c; }
+    .noshow { background: #f3f4f6; color: #374151; }
 
     .empty-state {
-        background: #fff;
-        border-radius: 20px;
-        padding: 50px;
         text-align: center;
+        padding: 40px;
+        background: #fff;
+        border-radius: 12px;
+        border: 1px solid #e5eaf2;
         color: #64748b;
-        border: 1px solid #e8eef6;
     }
 
-    @media (max-width: 992px) {
-        .summary-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .hospital-grid {
+    @media (max-width: 768px) {
+        .hospital-body {
             grid-template-columns: 1fr;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .summary-grid,
-        .stats-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .page-heading {
-            display: block;
         }
     }
 </style>
@@ -182,12 +167,11 @@
 <div class="analytics-container">
 
     <div class="page-heading">
-        <div>
-            <h2>Hospital Analytics</h2>
-            <p>Complete overview of hospitals, doctors, bookings, and revenue.</p>
-        </div>
+        <h2>Hospital Analytics</h2>
+        <p>Overview of hospitals, doctors, bookings, and revenue</p>
     </div>
 
+    <!-- SUMMARY -->
     <div class="summary-grid">
         <div class="summary-card">
             <div class="summary-label">Total Hospitals</div>
@@ -206,86 +190,77 @@
 
         <div class="summary-card">
             <div class="summary-label">Total Revenue</div>
-            <div class="summary-value green">RM{{ number_format($totalIncome, 2) }}</div>
+            <div class="summary-value green">
+                RM{{ number_format($totalIncome, 2) }}
+            </div>
         </div>
     </div>
 
-    <div class="section-title">Hospital Performance</div>
+    <!-- HOSPITALS -->
+    @if(count($hospitals))
+    <div class="hospital-grid">
 
-    @forelse($hospitals as $item)
-        @if($loop->first)
-            <div class="hospital-grid">
-        @endif
-
+        @foreach($hospitals as $item)
         <div class="hospital-card">
+
             <div class="hospital-top">
-                <div class="hospital-name">{{ $item['hospital']->hospital_name }}</div>
+                <div class="hospital-name">
+                    {{ $item['hospital']->hospital_name }}
+                </div>
                 <div class="status-pill">Active</div>
             </div>
 
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-label">Doctors</div>
-                    <div class="stat-value blue">{{ $item['doctors'] }}</div>
-                </div>
+            <div class="hospital-body">
 
-                <div class="stat-box">
-                    <div class="stat-label">Bookings</div>
-                    <div class="stat-value blue">{{ $item['bookings'] }}</div>
-                </div>
+                <!-- LEFT -->
+                <div class="main-stats">
+                    <div class="stat-box">
+                        <div>Doctors</div>
+                        <div class="stat-value">{{ $item['doctors'] }}</div>
+                    </div>
 
-                <div class="stat-box">
-                    <div class="stat-label">Pending</div>
-                    <div class="stat-value">{{ $item['pending'] }}</div>
-                </div>
+                    <div class="stat-box">
+                        <div>Bookings</div>
+                        <div class="stat-value">{{ $item['bookings'] }}</div>
+                    </div>
 
-                <div class="stat-box">
-                    <div class="stat-label">Accepted</div>
-                    <div class="stat-value text-primary">{{ $item['accepted'] }}</div>
-                </div>
+                    <div class="stat-box">
+                        <div>Revenue</div>
+                        <div class="stat-value green">
+                            RM{{ number_format($item['income'],2) }}
+                        </div>
+                    </div>
 
-                <div class="stat-box">
-                    <div class="stat-label">Completed</div>
-                    <div class="stat-value text-success">{{ $item['completed'] }}</div>
-                </div>
-
-                <div class="stat-box">
-                    <div class="stat-label">Rescheduled</div>
-                    <div class="stat-value text-warning">{{ $item['rescheduled'] }}</div>
-                </div>
-
-                <div class="stat-box">
-                    <div class="stat-label">Rejected</div>
-                    <div class="stat-value text-danger">{{ $item['rejected'] }}</div>
-                </div>
-
-                <div class="stat-box">
-                    <div class="stat-label">No Show</div>
-                    <div class="stat-value text-dark">{{ $item['no_show'] }}</div>
-                </div>
-
-                <div class="stat-box">
-                    <div class="stat-label">Income</div>
-                    <div class="stat-value green">
-                        RM{{ number_format($item['income'], 2) }}
+                    <div class="stat-box">
+                        <div>Net</div>
+                        <div class="stat-value">
+                            RM{{ number_format($item['net'],2) }}
+                        </div>
                     </div>
                 </div>
 
-                <div class="stat-box">
-                    <div class="stat-label">Net Balance</div>
-                    <div class="stat-value green {{ $item['net'] < 0 ? 'text-danger' : '' }}">
-                        RM{{ number_format($item['net'], 2) }}
-                    </div>
+                <!-- RIGHT -->
+                <div class="status-list">
+                    <div class="status-item pending">Pending <span>{{ $item['pending'] }}</span></div>
+                    <div class="status-item accepted">Accepted <span>{{ $item['accepted'] }}</span></div>
+                    <div class="status-item completed">Completed <span>{{ $item['completed'] }}</span></div>
+                    <div class="status-item rescheduled">Rescheduled <span>{{ $item['rescheduled'] }}</span></div>
+                    <div class="status-item rejected">Rejected <span>{{ $item['rejected'] }}</span></div>
+                    <div class="status-item noshow">No Show <span>{{ $item['no_show'] }}</span></div>
                 </div>
+
             </div>
-        @if($loop->last)
-            </div>
-        @endif
-    @empty
+
+        </div>
+        @endforeach
+
+    </div>
+    @else
         <div class="empty-state">
             No hospitals assigned yet.
         </div>
-    @endforelse
+    @endif
 
 </div>
+
 @endsection

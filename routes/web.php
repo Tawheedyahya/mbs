@@ -71,6 +71,11 @@ Route::middleware(['auth', 'role:hospital_super_admin'])
             Route::get('/analytics', 'analytics')->name('analytics');
             Route::get('/hospitals', 'hospitals')->name('hospitals.index');
             Route::get('/hospitals/{id}', 'showHospital')->name('hospitals.show');
+            Route::get('/bookings', 'bookings')->name('bookings');
+            Route::get('/bookings/{hospital}', 'hospitalBookings')->name('bookings.hospital');
+            Route::post('/bookings/{id}/status', 'updateBookingStatus')->name('bookings.status');
+            Route::post('/bookings/{id}/reschedule', 'reschedule')->name('bookings.reschedule');
+            Route::post('/bookings/{id}/assign', 'assignDoctor')->name('bookings.assign');
         });
     });
 

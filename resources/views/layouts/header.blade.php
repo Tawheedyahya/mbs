@@ -236,6 +236,13 @@
                             View Hospitals
                         </a>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('hospital_super_admin.bookings*') ? 'active' : '' }}"
+                        href="{{ route('hospital_super_admin.bookings') }}">
+                            Bookings
+                        </a>
+                    </li>
                 @endcan
 
                 {{-- HOSPITAL ADMIN --}}

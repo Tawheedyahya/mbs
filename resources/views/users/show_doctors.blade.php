@@ -227,7 +227,7 @@
                 <div class="doctor-card">
 
                     <div class="doctor-image">
-                        <img src="{{ asset('storage/' . $doc->profile_photo) }}" alt="{{ $doc->name }}">
+                        <img src="{{ Storage::disk('s3')->url($doc->profile_photo) }}" alt="{{ $doc->name }}">
                     </div>
 
                     <div class="doctor-info">

@@ -253,6 +253,58 @@ class Bookingcontroller extends Controller
         //     new BookingVerificationMail($actionToken)
         // );
 
+        // ── New booking notification to hospital staff ────────
+        try {
+            $notifyPhone = $hospital->new_booking_notify_phone ?? null;
+            $flowId      = $hospital->new_booking_flow_id      ?? null;
+            $fieldId     = $hospital->new_booking_field_id     ?? null;
+            $token       = $hospital->token                    ?? null;
+
+            if (!empty($notifyPhone) && !empty($flowId) && !empty($token)) {
+                $dateFormatted = \Carbon\Carbon::parse($request->booking_date)->format('d M Y (l)');
+                try {
+                    $timeFormatted = \Carbon\Carbon::createFromFormat('H:i:s', $request->start_time)->format('h:i A');
+                } catch (\Exception $e) {
+                    $timeFormatted = $request->start_time;
+                }
+                $text  = "New Booking Received\n";
+                $text .= "Hospital: {$hospital->hospital_name}\n";
+                $text .= "Patient: {$request->patient_name}\n";
+                $text .= "Date: {$dateFormatted}\n";
+                $text .= "Time: {$timeFormatted}\n";
+                $text .= "Booking Code: {$actionToken}\n";
+                if (!empty($request->cause)) $text .= "Reason: {$request->cause}\n";
+                $text .= "\nManage: " . config('app.url') . "/hospital_admin/overall_bookings";
+
+                $phones = array_filter(array_map('trim', explode(',', $notifyPhone)));
+                foreach ($phones as $phone) {
+                    $cleanPhone = preg_replace('/[^0-9+]/', '', $phone);
+                    if (empty($cleanPhone)) continue;
+                    try {
+                        $nc = new \GuzzleHttp\Client(['verify' => false]);
+                        $nc->post('https://app.speedbots.io/api/contacts', [
+                            'headers' => ['X-ACCESS-TOKEN' => $token, 'Content-Type' => 'application/json', 'accept' => 'application/json'],
+                            'json' => ['phone' => $cleanPhone], 'http_errors' => false,
+                        ]);
+                        if (!empty($fieldId)) {
+                            $nc->post("https://app.speedbots.io/api/contacts/{$cleanPhone}/custom_fields/{$fieldId}", [
+                                'headers' => ['X-ACCESS-TOKEN' => $token, 'Content-Type' => 'application/x-www-form-urlencoded', 'accept' => 'application/json'],
+                                'form_params' => ['value' => $text], 'http_errors' => false,
+                            ]);
+                        }
+                        $nc->post("https://app.speedbots.io/api/contacts/{$cleanPhone}/send/{$flowId}", [
+                            'headers' => ['X-ACCESS-TOKEN' => $token, 'accept' => 'application/json'],
+                            'http_errors' => false,
+                        ]);
+                    } catch (\Exception $e) {
+                        \Illuminate\Support\Facades\Log::error('New booking notify failed', ['phone' => $cleanPhone, 'error' => $e->getMessage()]);
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('New booking notification error', ['error' => $e->getMessage()]);
+        }
+
         return response()->json([
             'success'      => true,
             'booking_code' => $actionToken,

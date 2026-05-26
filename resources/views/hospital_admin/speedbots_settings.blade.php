@@ -283,6 +283,45 @@
                 </div>
                 @endif
 
+                {{-- ── New Booking Notification ── --}}
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header fw-semibold py-3" style="background:#1363C6;color:#fff;">
+                        🔔 New Booking Notification
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted small mb-3">
+                            Instantly notify staff via WhatsApp when a new booking is made — from the public booking link or in-person form.
+                        </p>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">📱 Notify Phone Number(s)</label>
+                            <input type="text" name="new_booking_notify_phone"
+                                class="form-control @error('new_booking_notify_phone') is-invalid @enderror"
+                                placeholder="e.g. 60173411778, 60184603889"
+                                value="{{ old('new_booking_notify_phone', $hospital->new_booking_notify_phone ?? '') }}">
+                            <small class="text-muted">Include country code, no + sign. Separate multiple with comma.</small>
+                            @error('new_booking_notify_phone')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">📋 Booking Details Custom Field ID</label>
+                            <input type="text" name="new_booking_field_id"
+                                class="form-control @error('new_booking_field_id') is-invalid @enderror"
+                                placeholder="e.g. 915759"
+                                value="{{ old('new_booking_field_id', $hospital->new_booking_field_id ?? '') }}">
+                            <small class="text-muted">Custom field where booking details text is saved before the flow fires.</small>
+                            @error('new_booking_field_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">🚀 New Booking Flow ID</label>
+                            <input type="text" name="new_booking_flow_id"
+                                class="form-control @error('new_booking_flow_id') is-invalid @enderror"
+                                placeholder="e.g. 1774503512345"
+                                value="{{ old('new_booking_flow_id', $hospital->new_booking_flow_id ?? '') }}">
+                            <small class="text-muted">Speedbots flow triggered after booking details are saved to custom field.</small>
+                            @error('new_booking_flow_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                    </div>
+                </div>
+
                 {{-- ── Notification Recipients ── --}}
                 <div class="card shadow-sm mb-4">
                     <div class="card-header fw-semibold py-3" style="background:#065f46;color:#fff;">

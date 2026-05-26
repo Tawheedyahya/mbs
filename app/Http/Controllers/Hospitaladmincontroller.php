@@ -476,6 +476,7 @@ class Hospitaladmincontroller extends Controller
             'updated_at'    => now(),
         ]);
         $this->createSpeedbotsContact($request->patient_phone, Auth::user()->hospital->id, $request->booking_date, $request->start_time, $actionToken);
+        $this->sendNewBookingNotification(Auth::user()->hospital->id, $request->patient_name, $request->booking_date, $request->start_time, $actionToken, $request->cause ?? null);
         return back()->with('success', 'Booking created successfully');
     }
 
@@ -1432,6 +1433,66 @@ class Hospitaladmincontroller extends Controller
             ]);
         }
     }
+    private function sendNewBookingNotification(int $hospitalId, string $patientName, string $bookingDate, string $startTime, string $bookingCode, ?string $cause = null): void
+    {
+        try {
+            $hospital    = \App\Models\Hospital::find($hospitalId);
+            if (!$hospital || empty($hospital->token)) return;
+
+            $notifyPhone = $hospital->new_booking_notify_phone ?? null;
+            $flowId      = $hospital->new_booking_flow_id      ?? null;
+            $fieldId     = $hospital->new_booking_field_id     ?? null;
+
+            if (empty($notifyPhone) || empty($flowId)) return;
+
+            $token         = $hospital->token;
+            $dateFormatted = \Carbon\Carbon::parse($bookingDate)->format('d M Y (l)');
+            try {
+                $timeFormatted = \Carbon\Carbon::createFromFormat('H:i:s', $startTime)->format('h:i A');
+            } catch (\Exception $e) {
+                $timeFormatted = $startTime;
+            }
+
+            $text  = "New Booking Received\n";
+            $text .= "Hospital: {$hospital->hospital_name}\n";
+            $text .= "Patient: {$patientName}\n";
+            $text .= "Date: {$dateFormatted}\n";
+            $text .= "Time: {$timeFormatted}\n";
+            $text .= "Booking Code: {$bookingCode}\n";
+            if ($cause) $text .= "Reason: {$cause}\n";
+            $text .= "\nManage: " . config('app.url') . "/hospital_admin/overall_bookings";
+
+            $phones = array_filter(array_map('trim', explode(',', $notifyPhone)));
+
+            foreach ($phones as $phone) {
+                $cleanPhone = preg_replace('/[^0-9+]/', '', $phone);
+                if (empty($cleanPhone)) continue;
+                try {
+                    Http::timeout(10)->withoutVerifying()
+                        ->withHeaders(['X-ACCESS-TOKEN' => $token, 'Content-Type' => 'application/json', 'accept' => 'application/json'])
+                        ->post('https://app.speedbots.io/api/contacts', ['phone' => $cleanPhone]);
+
+                    if (!empty($fieldId)) {
+                        Http::timeout(10)->withoutVerifying()
+                            ->withHeaders(['X-ACCESS-TOKEN' => $token, 'Content-Type' => 'application/x-www-form-urlencoded', 'accept' => 'application/json'])
+                            ->asForm()
+                            ->post("https://app.speedbots.io/api/contacts/{$cleanPhone}/custom_fields/{$fieldId}", ['value' => $text]);
+                    }
+
+                    Http::timeout(10)->withoutVerifying()
+                        ->withHeaders(['X-ACCESS-TOKEN' => $token, 'accept' => 'application/json'])
+                        ->post("https://app.speedbots.io/api/contacts/{$cleanPhone}/send/{$flowId}");
+
+                    Log::channel('hospital_admin')->info('New booking notification sent', ['hospital' => $hospital->hospital_name, 'phone' => $cleanPhone, 'code' => $bookingCode]);
+                } catch (\Exception $e) {
+                    Log::channel('hospital_admin')->error('New booking notification failed', ['phone' => $cleanPhone, 'error' => $e->getMessage()]);
+                }
+            }
+        } catch (\Exception $e) {
+            Log::channel('hospital_admin')->error('sendNewBookingNotification error', ['error' => $e->getMessage()]);
+        }
+    }
+
     private function createSpeedbotsContact(string $phone, int $hospitalId, ?string $bookingDate = null, ?string $bookingTime = null, ?string $bookingCode = null): void
     {
         try {
@@ -1668,6 +1729,9 @@ class Hospitaladmincontroller extends Controller
             'appointment_date_field_id'=> 'nullable|string|max:100',
             'appointment_time_field_id'=> 'nullable|string|max:100',
             'booking_code_field_id'    => 'nullable|string|max:100',
+            'new_booking_notify_phone' => 'nullable|string|max:500',
+            'new_booking_flow_id'      => 'nullable|string|max:100',
+            'new_booking_field_id'     => 'nullable|string|max:100',
             'summary_whatsapp'         => 'nullable|string|max:500',
             'summary_flow_id'          => 'nullable|string|max:100',
             'summary_field_id'         => 'nullable|string|max:100',
@@ -1686,6 +1750,9 @@ class Hospitaladmincontroller extends Controller
             'appointment_date_field_id' => $request->appointment_date_field_id,
             'appointment_time_field_id' => $request->appointment_time_field_id,
             'booking_code_field_id'     => $request->booking_code_field_id,
+            'new_booking_notify_phone'  => $request->new_booking_notify_phone,
+            'new_booking_flow_id'       => $request->new_booking_flow_id,
+            'new_booking_field_id'      => $request->new_booking_field_id,
             'summary_whatsapp'          => $request->summary_whatsapp,
             'summary_flow_id'           => $request->summary_flow_id,
             'summary_field_id'          => $request->summary_field_id,
